@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Christian J. — Portfolio</title>
+<title>Christianjaydb — Portfolio</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -104,6 +104,43 @@
   nav.pill a.active{color:#0b0d12; background:linear-gradient(120deg,var(--gold-soft),var(--gold));}
 
   .nav-links{display:flex; align-items:center; gap:6px; flex-wrap:wrap; justify-content:center;}
+
+  .nav-dropdown{position:relative;}
+  .nav-dropdown::after{
+    content:""; position:absolute; left:0; right:0; top:100%; height:14px;
+  }
+  .nav-drop-trigger{display:inline-flex; align-items:center; gap:5px; cursor:pointer;}
+  .drop-caret{
+    font-size:12px; line-height:1; color:var(--gold); opacity:.9;
+    transition:transform .22s ease, opacity .22s ease;
+  }
+  .nav-dropdown:hover .drop-caret, .nav-dropdown.open .drop-caret{transform:rotate(180deg); opacity:1;}
+
+  .nav-drop-menu{
+    position:absolute; top:calc(100% + 10px); left:50%; transform:translateX(-50%) translateY(-6px);
+    min-width:168px; padding:8px;
+    background:var(--nav-bg); backdrop-filter:blur(14px) saturate(140%);
+    border:1px solid var(--border); border-radius:14px;
+    box-shadow:0 14px 30px rgba(0,0,0,0.3);
+    display:flex; flex-direction:column; gap:2px;
+    opacity:0; visibility:hidden; pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease, visibility .2s ease;
+    z-index:10;
+  }
+  .nav-dropdown:hover .nav-drop-menu,
+  .nav-dropdown:focus-within .nav-drop-menu,
+  .nav-dropdown.open .nav-drop-menu{
+    opacity:1; visibility:visible; pointer-events:auto; transform:translateX(-50%) translateY(0);
+  }
+  .nav-drop-menu a{
+    display:block; text-align:center;
+    padding:9px 14px; border-radius:10px;
+    font-family:var(--mono); font-size:12.5px; letter-spacing:0.03em;
+    color:var(--text-dim);
+    transition:color .2s ease, background .2s ease;
+  }
+  .nav-drop-menu a:hover{color:var(--text); background:rgba(128,128,128,0.12);}
+  .nav-drop-menu a.active{color:#0b0d12; background:linear-gradient(120deg,var(--gold-soft),var(--gold));}
 
   .nav-toggle{
     display:none;
@@ -361,6 +398,29 @@
   .info-card .role + .role{margin-top:6px; border-top:none; padding-top:0;}
 
   /* ---------- PROJECTS ---------- */
+
+  /* subsection titles (Websites / Posters / Pubmats / Case Studies) — same
+     emboss + gold-border language as the Education .sub tags */
+  .subsection-title{
+    font-family:var(--display); font-weight:700; font-size:19px; letter-spacing:-0.005em;
+    color:var(--text);
+    display:inline-block;
+    margin:44px 0 22px;
+    padding:0 0 8px 14px;
+    border-left:3px solid var(--gold);
+    border-bottom:1px solid var(--border);
+    text-shadow:0 1px 0 rgba(255,255,255,0.12), 0 -1px 1px rgba(0,0,0,0.55);
+    transition:transform .22s ease, color .22s ease, text-shadow .22s ease, border-left-color .22s ease;
+    scroll-margin-top:110px;
+  }
+  .subsection-title:hover{
+    transform:translateY(-2px);
+    color:var(--gold-soft);
+    border-left-color:var(--gold-soft);
+    text-shadow:0 2px 0 rgba(255,255,255,0.16), 0 -1px 2px rgba(0,0,0,0.6);
+  }
+  #projects .subsection-title:first-of-type{margin-top:0;}
+
   .project-grid{display:grid; grid-template-columns:1fr 1fr; gap:26px;}
   .project-card{
     background:linear-gradient(160deg,var(--panel-2),var(--panel));
@@ -399,6 +459,54 @@
     transition:transform .2s ease, filter .2s ease;
   }
   .go-to-project:hover{transform:translateY(-2px); filter:brightness(1.06);}
+
+  /* ---------- POSTERS / PUBMATS (image preview -> original work) ---------- */
+  .media-grid{
+    column-count:4; column-gap:20px; margin-bottom:8px;
+  }
+  .media-item{
+    display:block; position:relative; overflow:hidden;
+    border-radius:var(--radius);
+    border:1px solid var(--border);
+    background:var(--panel);
+    box-shadow:var(--shadow);
+    transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    break-inside:avoid; -webkit-column-break-inside:avoid;
+    margin:0 0 20px;
+  }
+  .media-item:hover{
+    transform:translateY(-6px); border-color:var(--gold);
+    box-shadow:var(--shadow-lg), 0 0 0 1px color-mix(in srgb, var(--gold) 22%, transparent);
+  }
+  .media-thumb{
+    position:relative; width:100%; overflow:hidden;
+    background:var(--panel-2);
+  }
+  .media-thumb img{
+    width:100%; height:auto; display:block;
+    transition:transform .35s ease;
+  }
+  .media-item:hover .media-thumb img{transform:scale(1.06);}
+  .media-thumb::after{
+    content:"View original ↗";
+    position:absolute; inset:auto 0 0 0;
+    padding:10px 12px;
+    font-family:var(--mono); font-size:11px; letter-spacing:.03em;
+    color:#0b0d12;
+    background:linear-gradient(120deg,var(--gold-soft),var(--gold));
+    text-align:center;
+    transform:translateY(100%);
+    transition:transform .25s ease;
+  }
+  .media-item:hover .media-thumb::after{transform:translateY(0);}
+  .media-caption{
+    display:block; padding:12px 14px;
+    font-family:var(--mono); font-size:12px; letter-spacing:.02em;
+    color:var(--text-dim); text-align:center;
+    border-top:1px solid var(--border);
+    transition:color .22s ease;
+  }
+  .media-item:hover .media-caption{color:var(--text);}
 
   /* ---------- FOOTER ---------- */
   footer{
@@ -451,6 +559,7 @@
     .cert-grid{grid-template-columns:repeat(2,1fr);}
     .card-row{grid-template-columns:1fr;}
     .project-grid{grid-template-columns:1fr;}
+    .media-grid{column-count:3;}
   }
 
   /* ---- phones ---- */
@@ -476,6 +585,21 @@
     }
     .nav-links.open{opacity:1; visibility:visible; transform:translateY(0);}
     .nav-links a{width:100%; text-align:center; padding:12px; font-size:13.5px;}
+
+    .nav-dropdown{width:100%;}
+    .nav-drop-trigger{width:100%; justify-content:center; padding:12px; font-size:13.5px;}
+    .nav-drop-menu{
+      position:static; transform:none; pointer-events:none;
+      background:transparent; border:none; box-shadow:none;
+      min-width:0; padding:0; margin:0;
+      max-height:0; opacity:0; visibility:hidden; overflow:hidden;
+      transition:max-height .28s ease, opacity .2s ease, visibility .2s ease;
+    }
+    .nav-dropdown.open .nav-drop-menu{
+      transform:none;
+      max-height:240px; opacity:1; visibility:visible; pointer-events:auto; padding:2px 0 6px;
+    }
+    .nav-drop-menu a{padding:10px; font-size:13px; color:var(--text-dim); opacity:.85;}
 
     .hero{padding:56px 0 36px;}
     .photo-ring{width:132px; height:132px;}
@@ -505,6 +629,11 @@
 
     .project-card{padding:22px;}
     .project-card h4{font-size:22px;}
+
+    .subsection-title{font-size:16.5px; margin:32px 0 16px;}
+    .media-grid{column-count:2; column-gap:12px;}
+    .media-item{margin-bottom:12px;}
+    .media-caption{padding:9px 10px; font-size:11px;}
 
     .footer-grid{flex-direction:column; gap:26px;}
     .footer-links{gap:28px;}
@@ -546,7 +675,16 @@
       <a href="#certifications">Certifications</a>
       <a href="#experiences">Experiences</a>
       <a href="#leadership">Leadership</a>
-      <a href="#projects">Projects</a>
+      <div class="nav-dropdown" id="projectsDropdown">
+        <a href="#projects" class="nav-drop-trigger" aria-haspopup="true" aria-expanded="false">
+          Projects <span class="drop-caret">▾</span>
+        </a>
+        <div class="nav-drop-menu">
+          <a href="#proj-websites">Websites</a>
+          <a href="#proj-designs">Designs</a>
+          <a href="#proj-casestudies">Case Studies</a>
+        </div>
+      </div>
     </div>
     <button id="themeToggle" class="theme-switch" title="Toggle light / dark mode" aria-label="Toggle light / dark mode">
       <span class="ts-thumb" id="tsThumb"></span>
@@ -658,28 +796,29 @@
           <img class="slot-img" src="cdaa.jpg" alt="Certified Data Analytics Associate logo" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
           <span class="slot-fallback">α</span>
         </div>
-        <p>Certified Data Analytics Associate</p>
+        <p>Certified Data Analytics Associate (CDAA)</p>
+		<p>Project Management Fundmentals Certified (PMFC)</p>
       </div>
       <div class="cert-card">
         <div class="cert-badge img-slot" data-placeholder="IT" data-photo-key="cert_philnits">
           <img class="slot-img" src="it.jpg" alt="PhilNITS IP certification logo" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
           <span class="slot-fallback">IT</span>
         </div>
-        <p>Philippine National IT Standards IP Certification Exam Passer</p>
+        <p>Philippine National IT Standards (IP) Certification Exam Passer</p>
       </div>
       <div class="cert-card">
         <div class="cert-badge img-slot" data-placeholder="✓" data-photo-key="cert_sixsigma">
           <img class="slot-img" src="gb.jpg" alt="Lean Six Sigma Green Belt logo" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
           <span class="slot-fallback">✓</span>
         </div>
-        <p>Certified Lean Six Sigma Green Belt</p>
+        <p>Certified Lean Six Sigma Green Belt (CLSSGB)</p>
       </div>
       <div class="cert-card">
         <div class="cert-badge img-slot" data-placeholder="🛡" data-photo-key="cert_safety">
           <img class="slot-img" src="so.jpg" alt="Certified Safety Officer 2 logo" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
           <span class="slot-fallback">🛡</span>
         </div>
-        <p>Certified Safety Officer 2</p>
+        <p>Certified Safety Officer 2 (BOSH SO2)</p>
       </div>
     </div>
   </section>
@@ -750,38 +889,243 @@
     </div>
   </section>
 
-  <!-- PROJECTS -->
-  <section class="section" id="projects">
-    <div class="section-head reveal"><div class="section-pill">Projects</div></div>
-    <div class="project-grid reveal">
-      <div class="project-card">
-        <span class="project-tag">Award-Winning Capstone</span>
-        <h4>SUPAK Livestock Management System</h4>
-        <p>A digital platform built to help small livestock operations track herd health, feeding schedules, and inventory — recognized at the CET Student Research Colloquium 2025.</p>
-        <div class="project-stack">
-          <span class="stack-chip">Web App</span>
-          <span class="stack-chip">Database Design</span>
-          <span class="stack-chip">UI / UX</span>
-        </div>
-        <div class="project-link-row">
-          <a class="go-to-project" href="#" target="_blank" rel="noopener">Go to project ↗</a>
-        </div>
+<!-- PROJECTS -->
+<section class="section" id="projects">
+  <div class="section-head reveal">
+    <div class="section-pill">Projects</div>
+  </div>
+
+  <h3 class="subsection-title reveal" id="proj-websites">Websites</h3>
+  <div class="project-grid reveal">
+
+    <!-- Project 1 -->
+    <div class="project-card">
+      <span class="project-tag">Award-Winning Capstone</span>
+      <h4>SUPAK Livestock Management System</h4>
+      <p>
+        A digital platform built to help small livestock operations track herd
+        health, feeding schedules, and inventory — recognized at the CET
+        Student Research Colloquium 2025.
+      </p>
+
+      <div class="project-stack">
+        <span class="stack-chip">Web App</span>
+        <span class="stack-chip">Database Design</span>
+        <span class="stack-chip">UI / UX</span>
       </div>
-      <div class="project-card">
-        <span class="project-tag">Personal Build</span>
-        <h4>Portfolio &amp; Appreciation Site</h4>
-        <p>Self-contained HTML, CSS, and JavaScript site featuring scroll-triggered animation, swipeable photo slideshows, and a fully custom dark visual identity.</p>
-        <div class="project-stack">
-          <span class="stack-chip">HTML/CSS/JS</span>
-          <span class="stack-chip">Animation</span>
-          <span class="stack-chip">Responsive Design</span>
-        </div>
-        <div class="project-link-row">
-          <a class="go-to-project" href="#" target="_blank" rel="noopener">Go to project ↗</a>
-        </div>
+
+      <div class="project-link-row">
+        <a class="go-to-project"
+           href="https://supaksystem.com"
+           target="_blank"
+           rel="noopener noreferrer">
+          Go to project ↗
+        </a>
       </div>
     </div>
-  </section>
+
+    <!-- Project 2 -->
+    <div class="project-card">
+      <span class="project-tag">Personal Build</span>
+      <h4>Appreciation Site</h4>
+      <p>
+        Self-contained HTML, CSS, and JavaScript site featuring
+        scroll-triggered animation, swipeable photo slideshows,
+        and a fully custom dark visual identity.
+      </p>
+
+      <div class="project-stack">
+        <span class="stack-chip">HTML/CSS/JS</span>
+        <span class="stack-chip">Animation</span>
+        <span class="stack-chip">Responsive Design</span>
+      </div>
+
+      <div class="project-link-row">
+        <a class="go-to-project"
+           href="https://appreciation-wall.vercel.app/"
+           target="_blank"
+           rel="noopener noreferrer">
+          Go to project ↗
+        </a>
+      </div>
+    </div>
+
+    <!-- Project 3 -->
+    <div class="project-card">
+      <span class="project-tag">Start-Up Business Website</span>
+      <h4>Ascend</h4>
+      <p>
+        Self-contained HTML, CSS, and JavaScript site featuring
+        scroll-triggered animation, swipeable photo slideshows,
+        and a fully custom dark visual identity.
+      </p>
+
+      <div class="project-stack">
+        <span class="stack-chip">HTML/CSS/JS</span>
+        <span class="stack-chip">Animation</span>
+        <span class="stack-chip">Responsive Design</span>
+      </div>
+
+      <div class="project-link-row">
+        <a class="go-to-project"
+           href="https://appreciation-wall.vercel.app/"
+           target="_blank"
+           rel="noopener noreferrer">
+          Go to project ↗
+        </a>
+      </div>
+    </div>
+	
+	    <!-- Project 4 -->
+    <div class="project-card">
+      <span class="project-tag">Simple Site Project</span>
+      <h4>Duo Site</h4>
+      <p>
+        Self-contained HTML, CSS, and JavaScript site featuring
+        scroll-triggered animation, swipeable photo slideshows,
+        and a fully custom dark visual identity.
+      </p>
+
+      <div class="project-stack">
+        <span class="stack-chip">HTML/CSS/JS</span>
+        <span class="stack-chip">Animation</span>
+        <span class="stack-chip">Responsive Design</span>
+      </div>
+
+      <div class="project-link-row">
+        <a class="go-to-project"
+           href="https://appreciation-wall.vercel.app/"
+           target="_blank"
+           rel="noopener noreferrer">
+          Go to project ↗
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       POSTERS — each thumbnail links to the original work.
+       To add your own: duplicate one <a class="media-item"> block,
+       set the img src to your poster file/photo, and set the href
+       to the original file (Drive/Behance/Canva link, full-res image, etc).
+       ============================================================ -->
+  <h3 class="subsection-title reveal" id="proj-designs">Designs</h3>
+  <div class="media-grid reveal">
+
+    <a class="media-item" href="posters/poster-1-original.jpg" target="_blank" rel="noopener noreferrer">
+      <div class="media-thumb">
+        <img src="supakpost.jpg" alt="Poster 1" loading="lazy">
+      </div>
+      <span class="media-caption">Poster Title 1</span>
+    </a>
+
+    <a class="media-item" href="posters/poster-2-original.jpg" target="_blank" rel="noopener noreferrer">
+      <div class="media-thumb">
+        <img src="gad.jpg" alt="Poster 2" loading="lazy">
+      </div>
+      <span class="media-caption">Poster Title 2</span>
+    </a>
+
+    <a class="media-item" href="posters/poster-3-original.jpg" target="_blank" rel="noopener noreferrer">
+      <div class="media-thumb">
+        <img src="cybersecuritech.jpg" alt="Poster 3" loading="lazy">
+      </div>
+      <span class="media-caption">Poster Title 3</span>
+    </a>
+
+    <a class="media-item" href="posters/poster-4-original.jpg" target="_blank" rel="noopener noreferrer">
+      <div class="media-thumb">
+        <img src="binilink.jpg" alt="Poster 4" loading="lazy">
+      </div>
+      <span class="media-caption">Poster Title 4</span>
+    </a>
+
+    <a class="media-item" href="pubmats/pubmat-1-original.jpg" target="_blank" rel="noopener noreferrer">
+      <div class="media-thumb">
+        <img src="pubmats/pubmat-1.jpg" alt="Pubmat 1" loading="lazy">
+      </div>
+      <span class="media-caption">Pubmat Title 1</span>
+    </a>
+
+    <a class="media-item" href="pubmats/pubmat-2-original.jpg" target="_blank" rel="noopener noreferrer">
+      <div class="media-thumb">
+        <img src="pubmats/pubmat-2.jpg" alt="Pubmat 2" loading="lazy">
+      </div>
+      <span class="media-caption">Pubmat Title 2</span>
+    </a>
+
+    <a class="media-item" href="pubmats/pubmat-3-original.jpg" target="_blank" rel="noopener noreferrer">
+      <div class="media-thumb">
+        <img src="pubmats/pubmat-3.jpg" alt="Pubmat 3" loading="lazy">
+      </div>
+      <span class="media-caption">Pubmat Title 3</span>
+    </a>
+
+    <a class="media-item" href="pubmats/pubmat-4-original.jpg" target="_blank" rel="noopener noreferrer">
+      <div class="media-thumb">
+        <img src="pubmats/pubmat-4.jpg" alt="Pubmat 4" loading="lazy">
+      </div>
+      <span class="media-caption">Pubmat Title 4</span>
+    </a>
+
+  </div>
+
+  <!-- ============================================================
+       CASE STUDIES — uses the same card style as Websites.
+       Swap the tag/title/description and href for each write-up.
+       ============================================================ -->
+  <h3 class="subsection-title reveal" id="proj-casestudies">Case Studies</h3>
+  <div class="project-grid reveal">
+
+    <div class="project-card">
+      <span class="project-tag">Case Study 1</span>
+	  <h4>Lean Six Sigma Green Belt Certification Case Study</h4>
+      <p>
+        Short summary of the problem, your approach, and the outcome.
+        Replace this with the actual write-up description.
+      </p>
+
+      <div class="project-stack">
+        <span class="stack-chip">Process Optimization</span>
+        <span class="stack-chip">Continuous Improvement</span>
+      </div>
+
+      <div class="project-link-row">
+        <a class="go-to-project"
+           href="https://docs.google.com/document/d/16aM8zynAjqBdnVyL7XV7hgXjtdUoJV8xeyl36j_eS6U/edit?usp=sharing"
+           target="_blank"
+           rel="noopener noreferrer">
+          Read case study ↗
+        </a>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <span class="project-tag">Case Study 2</span>
+	  <h4>Data Analytics associateCertification Case Study</h4>
+      <p>
+        Short summary of the problem, your approach, and the outcome.
+        Replace this with the actual write-up description.
+      </p>
+
+      <div class="project-stack">
+        <span class="stack-chip">Data Analysis</span>
+        <span class="stack-chip">Data Visualization</span>
+		<span class="stack-chip">Statistical Analysis</span>
+      </div>
+
+      <div class="project-link-row">
+        <a class="go-to-project"
+           href="https://docs.google.com/document/d/14pkkpYTeXdcv6Fd3UZONt3nCiYs_Uh3nBDz3nyVUoJ4/edit?usp=sharing"
+           target="_blank"
+           rel="noopener noreferrer">
+          Read case study ↗
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
 
 </main>
 
@@ -789,7 +1133,7 @@
   <div class="wrap">
     <div class="footer-grid">
       <div class="footer-brand">
-        <h3>Christian J.</h3>
+        <h3>Christianjaydb</h3>
         <p>IT professional and Computer Technology student building practical, well-crafted digital tools.</p>
       </div>
       <div class="footer-links">
@@ -809,7 +1153,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© <span id="year"></span> Christian J. — All rights reserved.</span>
+      <span>© <span id="year"></span> Christianjaydb — All rights reserved.</span>
       <span>BatStateU, The NEU – Lipa</span>
     </div>
   </div>
@@ -850,13 +1194,16 @@
     navLinksEl.classList.remove('open');
     navToggle.setAttribute('aria-expanded','false');
     navToggle.querySelector('.ham-icon').textContent = '☰';
+    closeProjectsDropdown();
   }
   navToggle.addEventListener('click', () => {
     const isOpen = navLinksEl.classList.toggle('open');
     navToggle.setAttribute('aria-expanded', String(isOpen));
     navToggle.querySelector('.ham-icon').textContent = isOpen ? '✕' : '☰';
   });
-  navLinksEl.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
+  navLinksEl.querySelectorAll('a').forEach(a => {
+    if (!a.classList.contains('nav-drop-trigger')) a.addEventListener('click', closeNav);
+  });
   window.addEventListener('resize', () => { if(window.innerWidth > 640) closeNav(); });
 
   // ---------- nav active state on scroll ----------
@@ -866,6 +1213,33 @@
     let current = sections[0];
     sections.forEach(s => { if (s && window.scrollY >= s.offsetTop - 140) current = s; });
     navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current.id));
+  });
+
+  // ---------- projects dropdown (click + touch support, not just hover) ----------
+  const projectsDropdown = document.getElementById('projectsDropdown');
+  const projectsTrigger = projectsDropdown.querySelector('.nav-drop-trigger');
+
+  function closeProjectsDropdown(){
+    projectsDropdown.classList.remove('open');
+    projectsTrigger.setAttribute('aria-expanded', 'false');
+  }
+
+  projectsTrigger.addEventListener('click', (e) => {
+    e.preventDefault();
+    const isOpen = projectsDropdown.classList.toggle('open');
+    projectsTrigger.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  projectsDropdown.querySelectorAll('.nav-drop-menu a').forEach(a => {
+    a.addEventListener('click', closeProjectsDropdown);
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!projectsDropdown.contains(e.target)) closeProjectsDropdown();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeProjectsDropdown();
   });
 
   // ---------- typewriter roles ----------
