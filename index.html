@@ -271,8 +271,8 @@
     font-family:var(--display);
     font-weight:700;
     font-size:clamp(30px,4.6vw,46px);
-    letter-spacing:-0.01em;
-    line-height:1.08;
+    letter-spacing:0;
+    line-height:1.18;
     color:var(--text);
   }
   .hero-copy h1 span{
@@ -342,18 +342,19 @@
     display:grid; grid-template-columns:1fr 1fr 1fr; gap:30px; align-items:center;
   }
   .edu-block h3{
-    font-family:var(--display); font-weight:700; font-size:22px; letter-spacing:-0.01em; color:var(--text);
+    font-family:var(--display); font-weight:700; font-size:22px; letter-spacing:0; color:var(--text);
   }
   .edu-block .sub{
     margin-top:6px; font-size:14.5px; color:var(--text-dim);
     padding-bottom:8px; padding-left:12px;
     border-bottom:1px solid var(--border);
     border-left:3px solid var(--gold);
-    text-shadow:0 1px 0 rgba(255,255,255,0.12), 0 -1px 1px rgba(0,0,0,0.55);
-    transition:border-left-color .3s ease;
+    transition:color .3s ease, letter-spacing .3s ease, border-left-color .3s ease;
     display:inline-block;
   }
   .edu-block .sub:hover{
+    color:var(--text);
+    letter-spacing:0.015em;
     border-left-color:var(--gold-soft);
   }
   .edu-block{margin-bottom:26px;}
@@ -373,7 +374,7 @@
     background:radial-gradient(circle at 35% 30%, var(--panel-2), var(--panel));
     border:1px solid var(--border);
     display:flex; align-items:center; justify-content:center;
-    font-family:var(--display); font-weight:700; font-size:26px; letter-spacing:-0.01em; color:var(--gold-soft);
+    font-family:var(--display); font-weight:700; font-size:26px; letter-spacing:0; color:var(--gold-soft);
     box-shadow:var(--shadow-lg);
     transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
   }
@@ -464,18 +465,18 @@
   /* subsection titles (Websites / Posters / Pubmats / Case Studies) — same
      emboss + gold-border language as the Education .sub tags */
   .subsection-title{
-    font-family:var(--display); font-weight:700; font-size:19px; letter-spacing:-0.005em;
+    font-family:var(--display); font-weight:700; font-size:19px; letter-spacing:0;
     color:var(--text);
     display:inline-block;
     margin:44px 0 22px;
     padding:0 0 8px 14px;
     border-left:3px solid var(--gold);
     border-bottom:1px solid var(--border);
-    text-shadow:0 1px 0 rgba(255,255,255,0.12), 0 -1px 1px rgba(0,0,0,0.55);
-    transition:border-left-color .3s ease;
+    transition:color .3s ease, letter-spacing .3s ease, border-left-color .3s ease;
     scroll-margin-top:110px;
   }
   .subsection-title:hover{
+    letter-spacing:0.015em;
     border-left-color:var(--gold-soft);
   }
   #projects .subsection-title:first-of-type{margin-top:0;}
@@ -500,7 +501,7 @@
     font-family:var(--mono); font-size:11px; letter-spacing:.05em; color:var(--gold-soft);
     text-transform:uppercase;
   }
-  .project-card h4{font-family:var(--display); font-weight:700; font-size:23px; margin-top:8px; letter-spacing:-0.005em;}
+  .project-card h4{font-family:var(--display); font-weight:700; font-size:23px; margin-top:8px; letter-spacing:0;}
   .project-card p{margin-top:10px; font-size:14px; color:var(--text-dim);}
   .project-stack{display:flex; flex-wrap:wrap; gap:8px; margin-top:16px;}
   .stack-chip{
@@ -577,7 +578,7 @@
     display:flex; justify-content:space-between; align-items:flex-start; gap:30px; flex-wrap:wrap;
   }
   .footer-brand h3{
-    font-family:var(--display); font-weight:700; font-size:25px; letter-spacing:-0.01em;
+    font-family:var(--display); font-weight:700; font-size:25px; letter-spacing:0;
     background:linear-gradient(120deg,var(--gold-soft),var(--gold));
     -webkit-background-clip:text; background-clip:text; color:transparent;
     display:inline-block;
