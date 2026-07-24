@@ -6,7 +6,7 @@
 <title>Christianjaydb — Portfolio</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
   :root{
@@ -24,9 +24,9 @@
     --radius: 14px;
     --shadow: 0 10px 28px rgba(0,0,0,0.28);
     --shadow-lg: 0 20px 44px rgba(0,0,0,0.34);
-    --display: 'Space Grotesk', sans-serif;
-    --body: 'Manrope', sans-serif;
-    --mono: 'Space Mono', monospace;
+    --display: 'Poppins', sans-serif;
+    --body: 'Poppins', sans-serif;
+    --mono: 'Poppins', sans-serif;
     --nav-bg: rgba(22,26,35,0.72);
   }
 
@@ -100,7 +100,6 @@
     transition:color .25s ease, background .25s ease;
     white-space:nowrap;
   }
-  nav.pill a:hover{color:var(--text); background:rgba(128,128,128,0.12);}
   nav.pill a.active{color:#0b0d12; background:linear-gradient(120deg,var(--gold-soft),var(--gold));}
 
   .nav-links{display:flex; align-items:center; gap:6px; flex-wrap:wrap; justify-content:center;}
@@ -114,7 +113,7 @@
     font-size:12px; line-height:1; color:var(--gold); opacity:.9;
     transition:transform .22s ease, opacity .22s ease;
   }
-  .nav-dropdown:hover .drop-caret, .nav-dropdown.open .drop-caret{transform:rotate(180deg); opacity:1;}
+  .nav-dropdown.open .drop-caret{transform:rotate(180deg); opacity:1;}
 
   .nav-drop-menu{
     position:absolute; top:calc(100% + 10px); left:50%; transform:translateX(-50%) translateY(-6px);
@@ -127,8 +126,6 @@
     transition:opacity .2s ease, transform .2s ease, visibility .2s ease;
     z-index:10;
   }
-  .nav-dropdown:hover .nav-drop-menu,
-  .nav-dropdown:focus-within .nav-drop-menu,
   .nav-dropdown.open .nav-drop-menu{
     opacity:1; visibility:visible; pointer-events:auto; transform:translateX(-50%) translateY(0);
   }
@@ -139,8 +136,21 @@
     color:var(--text-dim);
     transition:color .2s ease, background .2s ease;
   }
-  .nav-drop-menu a:hover{color:var(--text); background:rgba(128,128,128,0.12);}
   .nav-drop-menu a.active{color:#0b0d12; background:linear-gradient(120deg,var(--gold-soft),var(--gold));}
+
+  /* Hover-only enhancements — scoped so touch taps (which fake :hover on many
+     phones) can never trigger the desktop hover/focus states or transforms.
+     Mobile relies purely on the JS-driven .open class above, which is what
+     keeps the tap interaction clean and jump-free. */
+  @media (hover:hover) and (pointer:fine){
+    nav.pill a:hover{color:var(--text); background:rgba(128,128,128,0.12);}
+    .nav-dropdown:hover .drop-caret{transform:rotate(180deg); opacity:1;}
+    .nav-dropdown:hover .nav-drop-menu,
+    .nav-dropdown:focus-within .nav-drop-menu{
+      opacity:1; visibility:visible; pointer-events:auto; transform:translateX(-50%) translateY(0);
+    }
+    .nav-drop-menu a:hover{color:var(--text); background:rgba(128,128,128,0.12);}
+  }
 
   .nav-toggle{
     display:none;
@@ -340,14 +350,11 @@
     border-bottom:1px solid var(--border);
     border-left:3px solid var(--gold);
     text-shadow:0 1px 0 rgba(255,255,255,0.12), 0 -1px 1px rgba(0,0,0,0.55);
-    transition:transform .22s ease, color .22s ease, text-shadow .22s ease, border-left-color .22s ease;
+    transition:border-left-color .3s ease;
     display:inline-block;
   }
   .edu-block .sub:hover{
-    transform:translateY(-2px);
-    color:var(--text);
     border-left-color:var(--gold-soft);
-    text-shadow:0 2px 0 rgba(255,255,255,0.16), 0 -1px 2px rgba(0,0,0,0.6);
   }
   .edu-block{margin-bottom:26px;}
   .edu-tag{
@@ -465,14 +472,11 @@
     border-left:3px solid var(--gold);
     border-bottom:1px solid var(--border);
     text-shadow:0 1px 0 rgba(255,255,255,0.12), 0 -1px 1px rgba(0,0,0,0.55);
-    transition:transform .22s ease, color .22s ease, text-shadow .22s ease, border-left-color .22s ease;
+    transition:border-left-color .3s ease;
     scroll-margin-top:110px;
   }
   .subsection-title:hover{
-    transform:translateY(-2px);
-    color:var(--gold-soft);
     border-left-color:var(--gold-soft);
-    text-shadow:0 2px 0 rgba(255,255,255,0.16), 0 -1px 2px rgba(0,0,0,0.6);
   }
   #projects .subsection-title:first-of-type{margin-top:0;}
 
@@ -631,18 +635,20 @@
     .nav-links{
       position:absolute; top:calc(100% + 10px); left:0; right:0;
       flex-direction:column; align-items:stretch; gap:4px;
-      background:var(--nav-bg); backdrop-filter:blur(14px) saturate(140%);
+      background:color-mix(in srgb, var(--panel) 96%, transparent);
+      backdrop-filter:blur(18px) saturate(140%);
       border:1px solid var(--border); border-radius:16px; padding:10px;
-      box-shadow:0 14px 30px rgba(0,0,0,0.3);
+      box-shadow:0 14px 34px rgba(0,0,0,0.4);
       opacity:0; visibility:hidden; transform:translateY(-8px);
       transition:opacity .22s ease, transform .22s ease, visibility .22s ease;
       max-height:70vh; overflow-y:auto;
     }
     .nav-links.open{opacity:1; visibility:visible; transform:translateY(0);}
-    .nav-links a{width:100%; text-align:center; padding:12px; font-size:13.5px;}
+    .nav-links a{width:100%; text-align:center; padding:12px; font-size:13.5px; color:var(--text); font-weight:500;}
+    .nav-links a.active{font-weight:600;}
 
     .nav-dropdown{width:100%;}
-    .nav-drop-trigger{width:100%; justify-content:center; padding:12px; font-size:13.5px;}
+    .nav-drop-trigger{width:100%; justify-content:center; padding:12px; font-size:13.5px; color:var(--text); font-weight:500;}
     .nav-drop-menu{
       position:static; transform:none; pointer-events:none;
       background:transparent; border:none; box-shadow:none;
@@ -654,7 +660,13 @@
       transform:none;
       max-height:240px; opacity:1; visibility:visible; pointer-events:auto; padding:2px 0 6px;
     }
-    .nav-drop-menu a{padding:10px; font-size:13px; color:var(--text-dim); opacity:.85;}
+    .nav-drop-menu a{
+      padding:10px; font-size:13px; font-weight:500;
+      color:var(--text-dim);
+      background:color-mix(in srgb, var(--border) 45%, transparent);
+      border-radius:10px; margin:3px 4px;
+    }
+    .nav-drop-menu a.active{color:#0b0d12;}
 
     .hero{padding:40px 0 28px;}
     .photo-ring{width:112px; height:112px;}
