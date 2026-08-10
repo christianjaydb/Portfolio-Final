@@ -460,6 +460,100 @@
   }
   .info-card .role + .role{margin-top:6px; border-top:none; padding-top:0;}
 
+  /* clickable role lines -> open a modal with responsibilities pulled from the CV.
+     Full reset since these are <button> elements now — browsers otherwise add
+     their own border/padding/font, which is what made them look boxy/odd. */
+  .info-card .role.role-clickable{
+    all:unset;
+    box-sizing:border-box;
+    position:relative;
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    width:100%;
+    margin-top:12px; padding-top:12px;
+    border-top:1px solid var(--border);
+    font-family:var(--mono); font-size:11.5px; letter-spacing:.03em;
+    color:var(--gold-soft);
+    cursor:pointer;
+    transition:color .2s ease;
+  }
+  .info-card .role.role-clickable + .role.role-clickable{margin-top:6px; border-top:none; padding-top:0;}
+  .info-card .role.role-clickable:hover,
+  .info-card .role.role-clickable:focus-visible{color:var(--text);}
+  .info-card .role.role-clickable:focus-visible{outline:2px solid var(--gold); outline-offset:2px; border-radius:4px;}
+  .info-card .role.role-clickable .role-arrow{
+    flex:none;
+    width:13px; height:13px;
+    color:var(--gold);
+    opacity:.85;
+    transition:transform .2s ease, opacity .2s ease;
+  }
+  .info-card .role.role-clickable:hover .role-arrow,
+  .info-card .role.role-clickable:focus-visible .role-arrow{
+    transform:translateX(3px); opacity:1;
+  }
+
+  /* tooltip: "See details" bubble above the role line on hover/focus */
+  .info-card .role.role-clickable .role-tooltip{
+    position:absolute;
+    bottom:calc(100% + 8px); left:50%; transform:translateX(-50%) translateY(4px);
+    white-space:nowrap;
+    background:var(--text); color:var(--bg);
+    font-family:var(--mono); font-size:10.5px; font-weight:600; letter-spacing:.03em;
+    padding:6px 10px; border-radius:7px;
+    box-shadow:0 8px 18px rgba(0,0,0,0.22);
+    opacity:0; visibility:hidden; pointer-events:none;
+    transition:opacity .18s ease, transform .18s ease, visibility .18s ease;
+    z-index:5;
+  }
+  .info-card .role.role-clickable .role-tooltip::after{
+    content:"";
+    position:absolute; top:100%; left:50%; transform:translateX(-50%);
+    border:5px solid transparent; border-top-color:var(--text);
+  }
+  .info-card .role.role-clickable:hover .role-tooltip,
+  .info-card .role.role-clickable:focus-visible .role-tooltip{
+    opacity:1; visibility:visible; transform:translateX(-50%) translateY(0);
+  }
+
+  /* ---------- ROLE MODAL ---------- */
+  .role-modal-overlay{
+    position:fixed; inset:0; z-index:300;
+    background:rgba(6,7,10,0.6);
+    backdrop-filter:blur(4px);
+    display:flex; align-items:center; justify-content:center;
+    padding:24px;
+    opacity:0; visibility:hidden; pointer-events:none;
+    transition:opacity .22s ease, visibility .22s ease;
+  }
+  .role-modal-overlay.open{opacity:1; visibility:visible; pointer-events:auto;}
+  .role-modal{
+    width:100%; max-width:480px; max-height:80vh; overflow-y:auto;
+    background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+    box-shadow:var(--shadow-lg);
+    padding:28px 26px;
+    transform:translateY(14px) scale(.98);
+    transition:transform .22s ease;
+  }
+  .role-modal-overlay.open .role-modal{transform:translateY(0) scale(1);}
+  .role-modal-head{display:flex; align-items:flex-start; justify-content:space-between; gap:14px;}
+  .role-modal-title{font-size:17px; font-weight:700; color:var(--text);}
+  .role-modal-org{font-size:12.5px; color:var(--text-faint); margin-top:4px;}
+  .role-modal-dates{
+    font-family:var(--mono); font-size:11px; letter-spacing:.03em; color:var(--gold-soft);
+    margin-top:8px;
+  }
+  .role-modal-close{
+    flex:none; width:30px; height:30px; border-radius:50%;
+    border:1px solid var(--border); background:var(--panel-2); color:var(--text-dim);
+    font-size:15px; line-height:1; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:border-color .2s ease, color .2s ease;
+  }
+  .role-modal-close:hover, .role-modal-close:focus-visible{border-color:var(--gold); color:var(--text); outline:none;}
+  .role-modal-list{margin-top:18px; padding-left:20px;}
+  .role-modal-list li{font-size:13.5px; color:var(--text-dim); margin-bottom:9px; line-height:1.55;}
+  .role-modal-list li:last-child{margin-bottom:0;}
+
   /* ---------- PROJECTS ---------- */
 
   /* subsection titles (Websites / Posters / Pubmats / Case Studies) — same
@@ -520,7 +614,13 @@
   }
   .go-to-project:hover{transform:translateY(-2px); filter:brightness(1.06);}
 
-  /* ---------- POSTERS / PUBMATS (image preview -> original work) ---------- */
+  /* ---------- POSTERS / PUBMATS (image preview -> original work) ----------
+     Original masonry layout + natural image sizing, kept as-is. The lag
+     fix lives in the JS below: a pooled/staggered loader controls *when*
+     each image is actually fetched (a few at a time, just ahead of
+     viewport) instead of letting every offscreen thumbnail race to load
+     at once. content-visibility also skips layout work for offscreen
+     tiles without changing how they size once visible. */
   .media-grid{
     column-count:4; column-gap:20px; margin-bottom:8px;
   }
@@ -533,6 +633,8 @@
     transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
     break-inside:avoid; -webkit-column-break-inside:avoid;
     margin:0 0 20px;
+    content-visibility:auto;
+    contain-intrinsic-size:0 260px;
   }
   .media-item:hover{
     transform:translateY(-6px); border-color:var(--gold);
@@ -544,8 +646,21 @@
   }
   .media-thumb img{
     width:100%; height:auto; display:block;
-    transition:transform .35s ease;
+    opacity:0;
+    transition:transform .35s ease, opacity .35s ease;
+    background:linear-gradient(100deg, var(--panel-2) 30%, var(--border) 50%, var(--panel-2) 70%);
+    background-size:200% 100%;
+    animation:mediaShimmer 1.3s ease-in-out infinite;
   }
+  .media-thumb img.loaded{
+    opacity:1; animation:none; background:none;
+  }
+  @keyframes mediaShimmer{
+    0%{background-position:200% 0;}
+    100%{background-position:-200% 0;}
+  }
+  }
+  .media-thumb img.loaded{opacity:1;}
   .media-item:hover .media-thumb img{transform:scale(1.06);}
   .media-thumb::after{
     content:"View original ↗";
@@ -921,7 +1036,7 @@
         </div>
         <h4>TESDA</h4>
         <div class="org">Provincial Training Center – Lipa</div>
-        <div class="role">Administrative Intern</div>
+        <button type="button" class="role role-clickable" data-role="tesda-admin">Administrative Intern<svg class="role-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="role-tooltip" role="tooltip">See details</span></button>
       </div>
       <div class="info-card">
         <div class="info-mark img-slot" data-placeholder="💻" data-photo-key="ttec">
@@ -930,7 +1045,7 @@
         </div>
         <h4>TTEC</h4>
         <div class="org">TTEC Lipa</div>
-        <div class="role">IT Intern</div>
+        <button type="button" class="role role-clickable" data-role="ttec-it">IT Intern<svg class="role-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="role-tooltip" role="tooltip">See details</span></button>
       </div>
       <div class="info-card">
         <div class="info-mark img-slot" data-placeholder="🍟" data-photo-key="mcdonalds">
@@ -939,7 +1054,7 @@
         </div>
         <h4>McDonald's</h4>
         <div class="org">McDonald's Philippines</div>
-        <div class="role">Maintenance Crew</div>
+        <button type="button" class="role role-clickable" data-role="mcdo-maintenance">Maintenance Crew<svg class="role-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="role-tooltip" role="tooltip">See details</span></button>
       </div>
     </div>
   </section>
@@ -954,8 +1069,8 @@
           <span class="slot-fallback">⚙</span>
         </div>
         <h4>Society of Engineering Technology Students (SETS)</h4>
-        <div class="role">Fourth Year Representative | A.Y. 2024–2025</div>
-        <div class="role">Business Manager | A.Y. 2024–2025</div>
+        <button type="button" class="role role-clickable" data-role="sets-rep">Fourth Year Representative | A.Y. 2025–2026<svg class="role-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="role-tooltip" role="tooltip">See details</span></button>
+        <button type="button" class="role role-clickable" data-role="sets-bm">Business Manager | A.Y. 2024–2025<svg class="role-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="role-tooltip" role="tooltip">See details</span></button>
       </div>
       <div class="info-card">
         <div class="info-mark img-slot" data-placeholder="🔺" data-photo-key="acets">
@@ -963,7 +1078,7 @@
           <span class="slot-fallback">🔺</span>
         </div>
         <h4>Association of Engineering Technology Students (ACETS)</h4>
-        <div class="role">Public Relations Officer 1 | A.Y. 2024–2025</div>
+        <button type="button" class="role role-clickable" data-role="acets-pro">Public Relations Officer I | A.Y. 2024–2025<svg class="role-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="role-tooltip" role="tooltip">See details</span></button>
       </div>
       <div class="info-card">
         <div class="info-mark img-slot" data-placeholder="🎓" data-photo-key="cet">
@@ -971,7 +1086,7 @@
           <span class="slot-fallback">🎓</span>
         </div>
         <h4>College of Engineering Technology</h4>
-        <div class="role">Block Representative, CPET 2102 – 2202</div>
+        <button type="button" class="role role-clickable" data-role="cet-block">Block Representative, CPET 2102 – 2202<svg class="role-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="role-tooltip" role="tooltip">See details</span></button>
       </div>
     </div>
   </section>
@@ -1016,15 +1131,16 @@
       <span class="project-tag">Personal Build</span>
       <h4>Appreciation Site</h4>
       <p>
-        A responsive personal website designed to showcase appreciation messages
-		through smooth animations, interactive photo galleries, and a modern
-		custom interface built with HTML, CSS, and JavaScript.
+        An interactive gratitude wall built to spotlight personal appreciation
+        messages through custom photo galleries and hand-tuned scroll
+        animations — a playground for polishing front-end animation and
+        interaction detail from scratch.
       </p>
 
       <div class="project-stack">
-        <span class="stack-chip">HTML/CSS/JS</span>
-        <span class="stack-chip">Animation</span>
-        <span class="stack-chip">Responsive Design</span>
+        <span class="stack-chip">Interactive Gallery</span>
+        <span class="stack-chip">Custom Animation</span>
+        <span class="stack-chip">Vanilla JS</span>
       </div>
 
       <div class="project-link-row">
@@ -1042,15 +1158,15 @@
       <span class="project-tag">Start-Up Business Website</span>
       <h4>Ascend</h4>
       <p>
-        A professional business website developed for a startup cybersecurity brand, 
-		featuring a modern interface, responsive layout, and clear presentation of 
-		services and company identity.
+        A brand-first marketing site built for an early-stage cybersecurity
+        startup, translating its service offerings and identity into a
+        clean, trust-building layout for prospective clients.
       </p>
 
       <div class="project-stack">
-        <span class="stack-chip">HTML/CSS/JS</span>
-        <span class="stack-chip">Animation</span>
-        <span class="stack-chip">Responsive Design</span>
+        <span class="stack-chip">Brand Identity</span>
+        <span class="stack-chip">Landing Page</span>
+        <span class="stack-chip">Responsive UI</span>
       </div>
 
       <div class="project-link-row">
@@ -1065,23 +1181,23 @@
 	
 	    <!-- Project 4 -->
     <div class="project-card">
-      <span class="project-tag">Simple Site Project</span>
-      <h4>Get To Know Me Site</h4>
+      <span class="project-tag">In Development</span>
+      <h4>Application Tracker</h4>
       <p>
-        A lightweight responsive website created using HTML, CSS, and JavaScript, 
-		featuring a clean user interface, smooth animations, and an optimized 
-		browsing experience across devices
+        A personal tool for organizing job and internship applications —
+        tracking status, deadlines, and follow-ups in one place so nothing
+        falls through the cracks during the search. Currently in progress.
       </p>
 
       <div class="project-stack">
-        <span class="stack-chip">HTML/CSS/JS</span>
-        <span class="stack-chip">Animation</span>
-        <span class="stack-chip">Responsive Design</span>
+        <span class="stack-chip">Job Search Tool</span>
+        <span class="stack-chip">Web App</span>
+        <span class="stack-chip">In Progress</span>
       </div>
 
       <div class="project-link-row">
         <a class="go-to-project"
-           href="https://get-to-know-mee.vercel.app/"
+           href="#"
            target="_blank"
            rel="noopener noreferrer">
           Go to project ↗
@@ -1095,105 +1211,120 @@
 
     <a class="media-item" href="https://canva.link/gm33chj47fweh7e" target="_blank" rel="noopener noreferrer">
       <div class="media-thumb">
-        <img src="supost.png" alt="SUPAK Poster" loading="lazy">
+        <img data-src="supost.png" alt="SUPAK Poster" class="media-lazy" decoding="async">
+        <noscript><img src="supost.png" alt="SUPAK Poster"></noscript>
       </div>
       <span class="media-caption">SUPAK Poster</span>
     </a>
 
     <a class="media-item" href="https://canva.link/upacfqytmumtgcf" target="_blank" rel="noopener noreferrer">
       <div class="media-thumb">
-        <img src="gadpost.png" alt="Frame Pubmat" loading="lazy">
+        <img data-src="gadpost.png" alt="Frame Pubmat" class="media-lazy" decoding="async">
+        <noscript><img src="gadpost.png" alt="Frame Pubmat"></noscript>
       </div>
       <span class="media-caption">GAD Poster</span>
     </a>
 
     <a class="media-item" href="https://canva.link/pvlg76nk2bkkstz" target="_blank" rel="noopener noreferrer">
       <div class="media-thumb">
-        <img src="pasppt.png" alt="Poster 3" loading="lazy">
+        <img data-src="pasppt.png" alt="Poster 3" class="media-lazy" decoding="async">
+        <noscript><img src="pasppt.png" alt="Poster 3"></noscript>
       </div>
       <span class="media-caption">Patillicious PPT</span>
     </a>
 
-    <a class="media-item" href=https://canva.link/umc84u03r686t73" target="_blank" rel="noopener noreferrer">
+    <a class="media-item" href="https://canva.link/umc84u03r686t73" target="_blank" rel="noopener noreferrer">
       <div class="media-thumb">
-        <img src="binicert.png" alt="Poster 4" loading="lazy">
+        <img data-src="binicert.png" alt="Poster 4" class="media-lazy" decoding="async">
+        <noscript><img src="binicert.png" alt="Poster 4"></noscript>
       </div>
       <span class="media-caption">Binilink Seminar Cert.</span>
     </a>
 
     <a class="media-item" href="https://canva.link/re0k4s3k2ltbc18" target="_blank" rel="noopener noreferrer">
       <div class="media-thumb">
-        <img src="webb.png" alt="Pubmat 1" loading="lazy">
+        <img data-src="webb.png" alt="Pubmat 1" class="media-lazy" decoding="async">
+        <noscript><img src="webb.png" alt="Pubmat 1"></noscript>
       </div>
       <span class="media-caption">World Innovation Day</span>
     </a>
 
     <a class="media-item" href="https://canva.link/lptd97j86nim44x" target="_blank" rel="noopener noreferrer">
       <div class="media-thumb">
-        <img src="F.png" alt="Pubmat 2" loading="lazy">
+        <img data-src="F.png" alt="Pubmat 2" class="media-lazy" decoding="async">
+        <noscript><img src="F.png" alt="Pubmat 2"></noscript>
       </div>
       <span class="media-caption">Pubmat Frame</span>
     </a>
 
     <a class="media-item" href="https://canva.link/pgk7m2b3h3kbfbn" target="_blank" rel="noopener noreferrer">
       <div class="media-thumb">
-        <img src="tesbro.png" alt="Pubmat 4" loading="lazy">
+        <img data-src="tesbro.png" alt="Pubmat 4" class="media-lazy" decoding="async">
+        <noscript><img src="tesbro.png" alt="Pubmat 4"></noscript>
       </div>
       <span class="media-caption">TESDA PTC Brochure</span>
     </a>
 
     <a class="media-item" href="https://canva.link/2z3shijc6gn9pvn" target="_blank" rel="noopener noreferrer">
       <div class="media-thumb">
-        <img src="cybercert.png" alt="Pubmat 3" loading="lazy">
+        <img data-src="cybercert.png" alt="Pubmat 3" class="media-lazy" decoding="async">
+        <noscript><img src="cybercert.png" alt="Pubmat 3"></noscript>
       </div>
       <span class="media-caption">Cybersecuritech Seminar Cert.</span>
     </a>
 
     <a class="media-item" href="https://canva.link/3kwjht3ih5oc5u7" target="_blank" rel="noopener noreferrer">
       <div class="media-thumb">
-        <img src="pasbro.png" alt="Pubmat 4" loading="lazy">
+        <img data-src="pasbro.png" alt="Pubmat 4" class="media-lazy" decoding="async">
+        <noscript><img src="pasbro.png" alt="Pubmat 4"></noscript>
       </div>
       <span class="media-caption">Pastillicious Brochure</span>
     </a>
 
     <a class="media-item" href="https://canva.link/5vfyte19r7aqhxf" target="_blank" rel="noopener noreferrer">
       <div class="media-thumb">
-        <img src="supman.png" alt="Pubmat 3" loading="lazy">
+        <img data-src="supman.png" alt="Pubmat 3" class="media-lazy" decoding="async">
+        <noscript><img src="supman.png" alt="Pubmat 3"></noscript>
       </div>
       <span class="media-caption">Supak User-Manual</span>
     </a>
 
     <a class="media-item" href="https://canva.link/4wwirig9qjx8441" target="_blank" rel="noopener noreferrer">
       <div class="media-thumb">
-        <img src="asppt.png" alt="Pubmat 4" loading="lazy">
+        <img data-src="asppt.png" alt="Pubmat 4" class="media-lazy" decoding="async">
+        <noscript><img src="asppt.png" alt="Pubmat 4"></noscript>
       </div>
       <span class="media-caption">Ascend PPT</span>
     </a>
 	
     <a class="media-item" href="https://canva.link/axefyqmmxzzeloz" target="_blank" rel="noopener noreferrer">
       <div class="media-thumb">
-        <img src="mer.png" alt="Pubmat 4" loading="lazy">
+        <img data-src="mer.png" alt="Pubmat 4" class="media-lazy" decoding="async">
+        <noscript><img src="mer.png" alt="Pubmat 4"></noscript>
       </div>
       <span class="media-caption">Income Generating Project PPT</span>
     </a>
 
     <a class="media-item" href="https://canva.link/gg83a8g3lfy25hg" target="_blank" rel="noopener noreferrer">
       <div class="media-thumb">
-        <img src="tar.png" alt="Pubmat 4" loading="lazy">
+        <img data-src="tar.png" alt="Pubmat 4" class="media-lazy" decoding="async">
+        <noscript><img src="tar.png" alt="Pubmat 4"></noscript>
       </div>
       <span class="media-caption">Tarpaulin Layout</span>
     </a>
 
     <a class="media-item" href="https://canva.link/mn7xazdyyts9ec4" target="_blank" rel="noopener noreferrer">
       <div class="media-thumb">
-        <img src="gadhol.png" alt="Pubmat 4" loading="lazy">
+        <img data-src="gadhol.png" alt="Pubmat 4" class="media-lazy" decoding="async">
+        <noscript><img src="gadhol.png" alt="Pubmat 4"></noscript>
       </div>
       <span class="media-caption">Pen Holder</span>
     </a>
 
     <a class="media-item" href="https://canva.link/bateks60850xgei" target="_blank" rel="noopener noreferrer">
       <div class="media-thumb">
-        <img src="stage.png" alt="Pubmat 4" loading="lazy">
+        <img data-src="stage.png" alt="Pubmat 4" class="media-lazy" decoding="async">
+        <noscript><img src="stage.png" alt="Pubmat 4"></noscript>
       </div>
       <span class="media-caption">Stage Layout</span>
     </a>
@@ -1264,7 +1395,7 @@
     <div class="footer-grid">
       <div class="footer-brand">
         <h3>Christianjaydb</h3>
-        <p>IT professional and Computer Technology graduate building practical, well-crafted digital tools.</p>
+        <p>Computer Technology graduate from Batangas State University, blending hands-on IT support, data analysis, and design experience into practical, well-crafted digital tools.</p>
       </div>
       <div class="footer-links">
         <div class="footer-col">
@@ -1290,6 +1421,20 @@
 </footer>
 
 <button id="backToTop" aria-label="Back to top">↑</button>
+
+<div class="role-modal-overlay" id="roleModalOverlay">
+  <div class="role-modal" role="dialog" aria-modal="true" aria-labelledby="roleModalTitle">
+    <div class="role-modal-head">
+      <div>
+        <div class="role-modal-title" id="roleModalTitle"></div>
+        <div class="role-modal-org" id="roleModalOrg"></div>
+        <div class="role-modal-dates" id="roleModalDates"></div>
+      </div>
+      <button type="button" class="role-modal-close" id="roleModalClose" aria-label="Close">✕</button>
+    </div>
+    <ul class="role-modal-list" id="roleModalList"></ul>
+  </div>
+</div>
 
 <script>
   // ---------- page preloader ----------
@@ -1461,6 +1606,170 @@
   themeBtn.addEventListener('click', () => {
     setTheme(root.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
   });
+
+  // ---------- designs grid: pooled/staggered image sourcing ----------
+  // Instead of letting every thumbnail race to fetch as soon as it's
+  // merely close to the viewport (what native loading="lazy" does, and
+  // what caused the request/decode burst -> masonry reflow lag while
+  // scrolling), this queues tiles as they approach the viewport and only
+  // sources a few at a time. Each image still keeps its natural size once
+  // loaded — nothing about the masonry/resize behavior changes.
+  (function(){
+    const lazyImgs = [...document.querySelectorAll('.media-lazy')];
+    if(!lazyImgs.length) return;
+
+    const POOL_SIZE = 3;
+    let active = 0;
+    const queue = [];
+
+    function pump(){
+      while(active < POOL_SIZE && queue.length){
+        const img = queue.shift();
+        active++;
+        const done = () => {
+          active--;
+          img.classList.add('loaded');
+          pump();
+        };
+        img.addEventListener('load', done, { once:true });
+        img.addEventListener('error', done, { once:true });
+        img.src = img.dataset.src;
+      }
+    }
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          queue.push(entry.target);
+          io.unobserve(entry.target);
+        }
+      });
+      pump();
+    }, { rootMargin: '600px 0px', threshold: 0 });
+
+    lazyImgs.forEach(img => io.observe(img));
+  })();
+
+  // ---------- role modals (work experience & leadership responsibilities) ----------
+  const ROLE_DATA = {
+    'tesda-admin': {
+      title: 'Administrative Intern',
+      org: 'TESDA Provincial Training Center — Lipa City, Batangas',
+      dates: 'February 2026 – May 2026',
+      bullets: [
+        'Processed and audited documentation for 300+ assessment participants, ensuring accurate records.',
+        'Improved administrative processes and procedures through proactive cross-functional support.',
+        'Coordinated communication between staff and trainees to strengthen collaboration.'
+      ]
+    },
+    'ttec-it': {
+      title: 'Information Technology Intern',
+      org: 'TTEC Philippines — Lipa City, Batangas',
+      dates: 'August 2025 – November 2025',
+      bullets: [
+        'Resolved hardware and software concerns through systematic troubleshooting processes.',
+        'Deployed and configured 100+ PC units, ensuring system readiness and compliance with IT standards.',
+        'Delivered technical support in collaboration with the IT team to sustain operational efficiency.'
+      ]
+    },
+    'mcdo-maintenance': {
+      title: 'Maintenance Crew',
+      org: "McDonald's Philippines — Lipa City, Batangas",
+      dates: 'October 2021 – October 2022',
+      bullets: [
+        'Executed routine maintenance and sanitation to ensure safety, cleanliness, and compliance.',
+        'Diagnosed issues and performed minor equipment repairs to support operational efficiency.',
+        'Improved internal audit ratings by at least 15% through consistent compliance and maintenance excellence.',
+        'Recognized as Standout Performer of the Month.',
+        'Recognized as Quality Expert of the Month.',
+        'Recognized as Best in Maintenance.'
+      ]
+    },
+    'sets-rep': {
+      title: 'Fourth Year Representative',
+      org: 'Society of Engineering Technology Students (SETS), BatStateU – The NEU, Lipa City',
+      dates: 'August 2025 – July 2026',
+      bullets: [
+        'Advocated for 130+ fourth-year students in academic, organizational, and welfare concerns.',
+        'Spearheaded events, meetings, and activities to enhance student engagement.',
+        'Streamlined communication between students and administration for efficient information flow.'
+      ]
+    },
+    'sets-bm': {
+      title: 'Business Manager',
+      org: 'Society of Engineering Technology Students (SETS), BatStateU – The NEU, Lipa City',
+      dates: 'August 2024 – August 2025',
+      bullets: [
+        'Directed procurement and acquisition of materials and supplies for event planning and execution.',
+        'Oversaw logistics, resource allocation, and distribution to ensure seamless operations.',
+        'Initiated and implemented 2 income-generating initiatives to support batch activities.'
+      ]
+    },
+    'acets-pro': {
+      title: 'Public Relations Officer I',
+      org: 'Association of Computer Engineering Technology Students (ACETS), BatStateU – The NEU, Lipa City',
+      dates: 'August 2024 – August 2025',
+      bullets: [
+        'Directed social media accounts and executed promotional campaigns to enhance visibility.',
+        'Developed, designed, and distributed 13+ publicity materials for events and announcements.',
+        'Cultivated and maintained relationships with stakeholders, faculty, and students.'
+      ]
+    },
+    'cet-block': {
+      title: 'Block Representative, CPET 2102–2202',
+      org: 'College of Engineering Technology (CET), BatStateU – The NEU, Lipa City',
+      dates: 'August 2023 – August 2024',
+      bullets: [
+        'Voiced student concerns and feedback to faculty and administration to facilitate resolution.',
+        'Administered class communications, updates, and announcements across the block.',
+        'Supported and coordinated 21+ student activities, events, and initiatives throughout.'
+      ]
+    }
+  };
+
+  (function(){
+    const overlay = document.getElementById('roleModalOverlay');
+    const titleEl = document.getElementById('roleModalTitle');
+    const orgEl = document.getElementById('roleModalOrg');
+    const datesEl = document.getElementById('roleModalDates');
+    const listEl = document.getElementById('roleModalList');
+    const closeBtn = document.getElementById('roleModalClose');
+    let lastFocused = null;
+
+    function openModal(id){
+      const data = ROLE_DATA[id];
+      if(!data) return;
+      titleEl.textContent = data.title;
+      orgEl.textContent = data.org;
+      datesEl.textContent = data.dates;
+      listEl.innerHTML = '';
+      data.bullets.forEach(b => {
+        const li = document.createElement('li');
+        li.textContent = b;
+        listEl.appendChild(li);
+      });
+      lastFocused = document.activeElement;
+      overlay.classList.add('open');
+      closeBtn.focus();
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(){
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+      if(lastFocused) lastFocused.focus();
+    }
+
+    document.querySelectorAll('.role-clickable').forEach(btn => {
+      btn.addEventListener('click', () => openModal(btn.dataset.role));
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', (e) => { if(e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+    });
+  })();
 
   // ---------- back to top (shows near end of page) ----------
   const backBtn = document.getElementById('backToTop');
