@@ -385,15 +385,44 @@
   }
   .uni-crest .slot-fallback{font-size:30px;}
   .uni-mark strong{font-family:var(--body); font-weight:700; font-size:15px; color:var(--text);}
-  .award{
-    background:var(--panel); border:1px solid var(--border); border-radius:12px;
-    padding:16px 18px; font-size:14px; color:var(--text-dim); margin-bottom:16px;
-    border-left:3px solid var(--gold);
-    box-shadow:var(--shadow);
-    transition:transform .22s ease, box-shadow .22s ease;
+  .awards-col{
+    display:flex; flex-direction:column; gap:16px; height:100%;
   }
-  .award:hover{transform:translateY(-3px); box-shadow:var(--shadow-lg);}
-  .award strong{color:var(--text); display:block; margin-bottom:2px; font-size:14.5px;}
+  .award{
+    flex:1;
+    display:flex; flex-direction:row; align-items:flex-start; gap:14px;
+    background:linear-gradient(160deg,var(--panel-2),var(--panel));
+    border:1px solid var(--border); border-radius:var(--radius);
+    padding:18px 20px; font-size:14px; color:var(--text-dim);
+    box-shadow:var(--shadow);
+    position:relative; overflow:hidden;
+    transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+  .award::after{
+    content:""; position:absolute; top:-50%; right:-25%; width:160px; height:160px;
+    background:radial-gradient(circle, color-mix(in srgb, var(--gold) 16%, transparent), transparent 70%);
+    pointer-events:none;
+  }
+  .award:hover{
+    transform:translateY(-4px); border-color:var(--gold);
+    box-shadow:var(--shadow-lg), 0 0 0 1px color-mix(in srgb, var(--gold) 22%, transparent);
+  }
+  .award-icon{
+    width:38px; height:38px; flex:none; border-radius:11px; margin-top:1px;
+    background:linear-gradient(135deg,var(--gold),var(--gold-soft));
+    display:flex; align-items:center; justify-content:center;
+    color:#0b0d12;
+    box-shadow:0 8px 18px -6px color-mix(in srgb, var(--gold) 60%, transparent);
+    position:relative; z-index:1;
+  }
+  .award-icon svg{width:19px; height:19px;}
+  .award-body{min-width:0; position:relative; z-index:1;}
+  .award-place{
+    display:block; font-family:var(--mono); font-size:10.5px; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--gold-soft); margin-bottom:4px;
+  }
+  .award strong{color:var(--text); display:block; margin-bottom:4px; font-size:14.5px; line-height:1.35;}
+  .award-meta{display:block; font-size:13px; color:var(--text-dim); line-height:1.5;}
 
   /* ---------- SKILLS ---------- */
   .skills-grid{
@@ -730,6 +759,8 @@
     .contact-row{justify-content:center;}
     .edu-grid{grid-template-columns:1fr; text-align:center;}
     .uni-mark{order:-1;}
+    .awards-col{height:auto;}
+    .award{text-align:left;}
     .skills-grid{grid-template-columns:repeat(2,1fr);}
     .cert-grid{grid-template-columns:repeat(2,1fr);}
     .card-row{grid-template-columns:1fr;}
@@ -950,14 +981,26 @@
         <strong>BatStateU, The NEU – Lipa</strong>
       </div>
 
-      <div>
+      <div class="awards-col">
         <div class="award">
-          <strong>2nd Place — Best Paper &amp; Best Poster Award</strong>
-          CET Student Research Colloquium 2025, Software Development Track
+          <div class="award-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M7 5H4a2 2 0 0 0 0 4h1"/><path d="M17 5h3a2 2 0 0 1 0 4h-1"/></svg>
+          </div>
+          <div class="award-body">
+            <span class="award-place">2nd Place</span>
+            <strong>Best Paper &amp; Best Poster Award</strong>
+            <span class="award-meta">CET Student Research Colloquium 2025, Software Development Track</span>
+          </div>
         </div>
         <div class="award">
-          <strong>2nd Place — BatStateU Super Quiz Bowl</strong>
-          Spartapalooza 2025: The Orgdomination
+          <div class="award-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M7 5H4a2 2 0 0 0 0 4h1"/><path d="M17 5h3a2 2 0 0 1 0 4h-1"/></svg>
+          </div>
+          <div class="award-body">
+            <span class="award-place">2nd Place</span>
+            <strong>BatStateU Super Quiz Bowl</strong>
+            <span class="award-meta">Spartapalooza 2025: The Orgdomination</span>
+          </div>
         </div>
       </div>
     </div>
@@ -967,22 +1010,25 @@
   <section class="section" id="skills">
     <div class="section-head reveal"><div class="section-pill">Technical Skills</div></div>
     <div class="skills-grid reveal">
-      <div class="skill-tag"><span class="skill-dot"></span>Troubleshooting</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>Networking</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>Cybersecurity</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>Programming</div>
+      <div class="skill-tag"><span class="skill-dot"></span>IT Support</div>
+	  <div class="skill-tag"><span class="skill-dot"></span>Hardware &amp; Software Support</div>
+	  <div class="skill-tag"><span class="skill-dot"></span>Network Administration</div>
+	  <div class="skill-tag"><span class="skill-dot"></span>IT Asset Management</div>
+	  <div class="skill-tag"><span class="skill-dot"></span>Database Management</div>
 	  <div class="skill-tag"><span class="skill-dot"></span>Data Analysis</div>
 	  <div class="skill-tag"><span class="skill-dot"></span>Data Visualization</div>
 	  <div class="skill-tag"><span class="skill-dot"></span>Statistical Analysis</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>Database Management</div>
+	  <div class="skill-tag"><span class="skill-dot"></span>Microsoft Office</div>
+	  <div class="skill-tag"><span class="skill-dot"></span>Google Workspace</div>
+	  <div class="skill-tag"><span class="skill-dot"></span>Cybersecurity</div>
+	  <div class="skill-tag"><span class="skill-dot"></span>Programming</div>
 	  <div class="skill-tag"><span class="skill-dot"></span>AI Automation</div>
 	  <div class="skill-tag"><span class="skill-dot"></span>Prompt Engineering</div>
 	  <div class="skill-tag"><span class="skill-dot"></span>Process Optimization</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>IT Asset Management</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>Microsoft Office</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>Google Workspace</div>
+	  <div class="skill-tag"><span class="skill-dot"></span>Technical Documentation</div>
+	  <div class="skill-tag"><span class="skill-dot"></span>System Administration</div>
 	  <div class="skill-tag"><span class="skill-dot"></span>Graphic Design</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>Admin Support</div>
+	  <div class="skill-tag"><span class="skill-dot"></span>Administrative Support</div>
     </div>
   </section>
 
@@ -1106,23 +1152,23 @@
 
     <!-- Project 1 -->
     <div class="project-card">
-      <span class="project-tag">Award-Winning Capstone</span>
-      <h4>SUPAK Livestock Management System</h4>
+      <span class="project-tag">Networking Tool</span>
+      <h4>Subnet Lab</h4>
       <p>
-        A digital platform built to help small livestock operations track herd
-        health, feeding schedules, and inventory — recognized at the CET
-        Student Research Colloquium 2025.
+        An interactive networking platform for learning IPv4 addressing,
+        subnetting, and CIDR through calculators, visualizations, and
+        hands-on practice.
       </p>
 
       <div class="project-stack">
-        <span class="stack-chip">Web App</span>
-        <span class="stack-chip">Database Design</span>
-        <span class="stack-chip">UI / UX</span>
+        <span class="stack-chip">Networking</span>
+        <span class="stack-chip">Interactive Tool</span>
+        <span class="stack-chip">Educational</span>
       </div>
 
       <div class="project-link-row">
         <a class="go-to-project"
-           href="https://supaksystem.com"
+           href="https://subnet-lab.vercel.app"
            target="_blank"
            rel="noopener noreferrer">
           Go to project ↗
@@ -1661,9 +1707,9 @@
       org: 'TESDA Provincial Training Center — Lipa City, Batangas',
       dates: 'February 2026 – May 2026',
       bullets: [
-        'Processed and audited documentation for 300+ assessment participants, ensuring accurate records.',
-        'Improved administrative processes and procedures through proactive cross-functional support.',
-        'Coordinated communication between staff and trainees to strengthen collaboration.'
+        'Processed and audited documentation for 300+ participants while managing the inventory of tools and supplies.',
+        'Improved administrative processes through cross-functional support and staff-trainee coordination.',
+        'Created publication materials (pubmats) for training programs, announcements, and organizational activities.'
       ]
     },
     'ttec-it': {
@@ -1671,9 +1717,9 @@
       org: 'TTEC Philippines — Lipa City, Batangas',
       dates: 'August 2025 – November 2025',
       bullets: [
-        'Resolved hardware and software concerns through systematic troubleshooting processes.',
-        'Deployed and configured 100+ PC units, ensuring system readiness and compliance with IT standards.',
-        'Delivered technical support in collaboration with the IT team to sustain operational efficiency.'
+        'Resolved hardware, software, and network issues through systematic troubleshooting and diagnostic procedures.',
+        'Deployed and configured 100+ PC units while ensuring proper setup, functionality, and compliance with IT standards.',
+        'Maintained and audited IT asset inventory, ensuring accurate records, proper asset tracking, and accountability.'
       ]
     },
     'mcdo-maintenance': {
@@ -1681,12 +1727,12 @@
       org: "McDonald's Philippines — Lipa City, Batangas",
       dates: 'October 2021 – October 2022',
       bullets: [
-        'Executed routine maintenance and sanitation to ensure safety, cleanliness, and compliance.',
-        'Diagnosed issues and performed minor equipment repairs to support operational efficiency.',
-        'Improved internal audit ratings by at least 15% through consistent compliance and maintenance excellence.',
-        'Recognized as Standout Performer of the Month.',
-        'Recognized as Quality Expert of the Month.',
-        'Recognized as Best in Maintenance.'
+        'Performed routine maintenance and sanitation procedures to ensure workplace safety, cleanliness, and compliance.',
+        'Diagnosed equipment issues and conducted minor repairs to minimize disruptions and maintain operational efficiency.',
+        'Improved internal audit ratings by 15% through consistent compliance, attention to detail, and maintenance.',
+        'Standout Performer of the Month.',
+        'Quality Expert of the Month.',
+        'Best in Maintenance.'
       ]
     },
     'sets-rep': {
@@ -1694,9 +1740,9 @@
       org: 'Society of Engineering Technology Students (SETS), BatStateU – The NEU, Lipa City',
       dates: 'August 2025 – July 2026',
       bullets: [
-        'Advocated for 130+ fourth-year students in academic, organizational, and welfare concerns.',
-        'Spearheaded events, meetings, and activities to enhance student engagement.',
-        'Streamlined communication between students and administration for efficient information flow.'
+        'Represented 120+ fourth-year students in academic, organizational, and welfare concerns, ensuring needs were given.',
+        'Coordinated events, meetings, and student activities to strengthen engagement, participation, and involvement.',
+        'Facilitated communication between students and administration to promote efficient information flow.'
       ]
     },
     'sets-bm': {
@@ -1704,9 +1750,9 @@
       org: 'Society of Engineering Technology Students (SETS), BatStateU – The NEU, Lipa City',
       dates: 'August 2024 – August 2025',
       bullets: [
-        'Directed procurement and acquisition of materials and supplies for event planning and execution.',
-        'Oversaw logistics, resource allocation, and distribution to ensure seamless operations.',
-        'Initiated and implemented 2 income-generating initiatives to support batch activities.'
+        'Managed procurement and acquisition of materials and supplies to support successful event planning and execution.',
+        'Oversaw logistics, resource allocation, and distribution to ensure efficient and organized event operations.',
+        'Implemented two income-generating initiatives to provide additional resources for batch activities and programs.'
       ]
     },
     'acets-pro': {
@@ -1714,9 +1760,9 @@
       org: 'Association of Computer Engineering Technology Students (ACETS), BatStateU – The NEU, Lipa City',
       dates: 'August 2024 – August 2025',
       bullets: [
-        'Directed social media accounts and executed promotional campaigns to enhance visibility.',
-        'Developed, designed, and distributed 13+ publicity materials for events and announcements.',
-        'Cultivated and maintained relationships with stakeholders, faculty, and students.'
+        'Managed social media accounts and promotional campaigns to strengthen organizational visibility and engagement.',
+        'Designed and distributed 13+ publicity materials for events, programs, announcements, and organizational initiatives.',
+        'Maintained positive relationships with stakeholders, faculty, and students to support effective communication.'
       ]
     },
     'cet-block': {
@@ -1724,9 +1770,9 @@
       org: 'College of Engineering Technology (CET), BatStateU – The NEU, Lipa City',
       dates: 'August 2023 – August 2024',
       bullets: [
-        'Voiced student concerns and feedback to faculty and administration to facilitate resolution.',
-        'Administered class communications, updates, and announcements across the block.',
-        'Supported and coordinated 21+ student activities, events, and initiatives throughout.'
+        'Represented student concerns and feedback to faculty and administration to facilitate communication and resolution.',
+        'Managed communications, updates, and announcements to ensure students received accurate and timely information.',
+        'Supported and coordinated 21+ student activities, events, and initiatives to promote collaboration and participation.'
       ]
     }
   };
