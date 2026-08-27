@@ -365,11 +365,33 @@
   }
   .cv-modal-close:hover, .cv-modal-close:focus-visible{border-color:var(--gold); color:var(--text); outline:none;}
   .cv-modal-frame-wrap{
-    flex:1; min-height:0;
+    flex:1; min-height:0; position:relative;
     background:var(--panel-2); border:1px solid var(--border); border-radius:10px;
     overflow:hidden;
   }
-  .cv-modal-frame-wrap iframe{width:100%; height:100%; min-height:60vh; border:0; display:block;}
+  .cv-modal-frame-wrap iframe{width:100%; height:100%; min-height:60vh; border:0; display:block; position:relative; z-index:1;}
+  .cv-modal-status{
+    position:absolute; inset:0; z-index:2;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
+    text-align:center; padding:24px;
+    color:var(--text-dim); font-size:13.5px;
+    background:var(--panel-2);
+    transition:opacity .2s ease, visibility .2s ease;
+  }
+  .cv-modal-status.hidden{opacity:0; visibility:hidden; pointer-events:none;}
+  .cv-modal-status strong{color:var(--text); font-size:14.5px; font-weight:700;}
+  .cv-modal-status span{max-width:340px; line-height:1.5;}
+  .cv-modal-status code{
+    background:var(--panel); border:1px solid var(--border); border-radius:5px;
+    padding:1px 6px; font-size:12.5px; color:var(--gold-soft);
+  }
+  .cv-modal-status a{color:var(--gold-soft); font-weight:600; text-decoration:underline; text-underline-offset:2px;}
+  .cv-modal-spinner{
+    width:26px; height:26px; border-radius:50%;
+    border:2.5px solid var(--border); border-top-color:var(--gold);
+    animation:cvSpin .8s linear infinite;
+  }
+  @keyframes cvSpin{ to{ transform:rotate(360deg); } }
   .cv-modal-foot{display:flex; justify-content:flex-end;}
   @media (max-width:600px){
     .cv-modal{padding:16px 16px 20px;}
@@ -1603,6 +1625,10 @@
     </div>
     <div class="cv-modal-frame-wrap">
       <iframe id="cvModalFrame" src="" title="CV preview"></iframe>
+      <div class="cv-modal-status" id="cvModalStatus">
+        <div class="cv-modal-spinner" id="cvModalSpinner"></div>
+        <div id="cvModalStatusText">Loading preview…</div>
+      </div>
     </div>
     <div class="cv-modal-foot">
       <a class="cv-download" href="CV_Belen.pdf" download="Belen_Christian_Jay_D_CV.pdf">
@@ -1847,15 +1873,49 @@
     const overlay = document.getElementById('cvModalOverlay');
     const closeBtn = document.getElementById('cvModalClose');
     const frame = document.getElementById('cvModalFrame');
-    const CV_SRC = 'CV_Belen.pdf#toolbar=0&navpanes=0';
+    const statusEl = document.getElementById('cvModalStatus');
+    const spinnerEl = document.getElementById('cvModalSpinner');
+    const statusTextEl = document.getElementById('cvModalStatusText');
+    const CV_FILE = 'CV_Belen.pdf';
     let lastFocused = null;
+    let checked = false;
+
+    function showStatus(html, showSpinner){
+      statusTextEl.innerHTML = html;
+      spinnerEl.style.display = showSpinner ? 'block' : 'none';
+      statusEl.classList.remove('hidden');
+    }
+    function hideStatus(){ statusEl.classList.add('hidden'); }
+
+    function loadPreview(){
+      if(checked) return;
+      checked = true;
+      showStatus('Loading preview…', true);
+
+      fetch(CV_FILE, { method:'HEAD' })
+        .then(res => {
+          if(!res.ok) throw new Error('not found');
+          frame.src = CV_FILE + '#toolbar=0&navpanes=0';
+          frame.addEventListener('load', hideStatus, { once:true });
+          // safety fallback in case 'load' doesn't fire reliably for the PDF viewer
+          setTimeout(hideStatus, 900);
+        })
+        .catch(() => {
+          showStatus(
+            '<strong>Preview unavailable</strong>' +
+            '<span>Make sure <code>' + CV_FILE + '</code> is sitting in the same folder as this page.</span>' +
+            '<a href="' + CV_FILE + '" target="_blank" rel="noopener">Try opening it directly →</a>',
+            false
+          );
+        });
+    }
 
     function openModal(){
-      if(!frame.src) frame.src = CV_SRC;
       lastFocused = document.activeElement;
       overlay.classList.add('open');
       closeBtn.focus();
       document.body.style.overflow = 'hidden';
+      loadPreview();
     }
 
     function closeModal(){
