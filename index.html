@@ -527,17 +527,31 @@
   .award-meta{display:block; font-size:13px; color:var(--text-dim); line-height:1.5;}
 
   /* ---------- SKILLS ---------- */
-  .skills-grid{
-    display:grid; grid-template-columns:repeat(4,1fr); gap:14px;
+  /* Grouped as a spec sheet rather than a flat grid of identical badges —
+     each column is a real category so the grouping means something. */
+  .skills-groups{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:8px 32px;
   }
+  .skill-group-title{
+    margin:0 0 10px; padding-bottom:10px;
+    font-family:var(--mono); font-weight:700; font-size:11px;
+    letter-spacing:.14em; text-transform:uppercase;
+    color:var(--gold-soft);
+    border-bottom:1px solid var(--border);
+  }
+  .skill-list{display:flex; flex-direction:column;}
   .skill-tag{
-    display:flex; align-items:center; gap:10px;
-    background:var(--panel); border:1px solid var(--border);
-    padding:14px 16px; border-radius:10px; font-size:13.5px; color:var(--text-dim);
-    transition:transform .2s ease, border-color .2s ease, color .2s ease;
+    display:flex; align-items:baseline; gap:9px;
+    padding:9px 0; font-size:13.5px; color:var(--text-dim);
+    border-bottom:1px solid color-mix(in srgb, var(--border) 55%, transparent);
+    transition:color .2s ease, padding-left .2s ease;
   }
-  .skill-tag:hover{transform:translateY(-3px); border-color:var(--gold); color:var(--text);}
-  .skill-dot{width:7px;height:7px;border-radius:50%; background:var(--gold); flex:none;}
+  .skill-list .skill-tag:last-child{border-bottom:none;}
+  .skill-tag::before{
+    content:"–"; flex:none; color:var(--gold);
+    font-family:var(--mono); font-size:12px;
+  }
+  .skill-tag:hover{color:var(--text); padding-left:4px;}
 
   /* ---------- CERTS ---------- */
   .cert-grid{
@@ -865,7 +879,7 @@
     .uni-mark{order:-1;}
     .awards-col{height:auto;}
     .award{text-align:left;}
-    .skills-grid{grid-template-columns:repeat(2,1fr);}
+    .skills-groups{grid-template-columns:repeat(2,1fr); gap:28px 24px;}
     .cert-grid{grid-template-columns:repeat(2,1fr);}
     .card-row{grid-template-columns:1fr;}
     .project-grid{grid-template-columns:1fr;}
@@ -941,8 +955,8 @@
     .uni-crest{width:110px; height:110px; font-size:24px;}
     .uni-crest .slot-fallback{font-size:24px;}
 
-    .skills-grid{grid-template-columns:1fr 1fr; gap:10px;}
-    .skill-tag{padding:12px 12px; font-size:12.5px;}
+    .skills-groups{grid-template-columns:1fr 1fr; gap:24px 18px;}
+    .skill-tag{padding:8px 0; font-size:12.5px;}
 
     .cert-grid{grid-template-columns:repeat(2,1fr); gap:16px;}
     .cert-badge{width:76px; height:76px; font-size:24px;}
@@ -970,7 +984,7 @@
   @media(max-width:400px){
     .wrap{padding:0 14px;}
     .hero-copy h1{font-size:clamp(26px,11vw,36px);}
-    .skills-grid{grid-template-columns:1fr;}
+    .skills-groups{grid-template-columns:1fr; gap:22px;}
     .cert-grid{grid-template-columns:1fr 1fr; gap:12px;}
     .cert-card p{font-size:11.5px; max-width:120px;}
     .contact-chip{font-size:12px; padding:8px 12px;}
@@ -1129,26 +1143,46 @@
   <!-- SKILLS -->
   <section class="section" id="skills">
     <div class="section-head reveal"><div class="section-pill">Technical Skills</div></div>
-    <div class="skills-grid reveal">
-      <div class="skill-tag"><span class="skill-dot"></span>IT Support</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>Hardware &amp; Software Support</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>Network Administration</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>IT Asset Management</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>Database Management</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>Data Analysis</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>Data Visualization</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>Statistical Analysis</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>Microsoft Office</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>Google Workspace</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>Cybersecurity</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>Programming</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>AI Automation</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>Prompt Engineering</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>Process Optimization</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>Technical Documentation</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>System Administration</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>Graphic Design</div>
-	  <div class="skill-tag"><span class="skill-dot"></span>Administrative Support</div>
+    <div class="skills-groups reveal">
+      <div class="skill-group">
+        <h3 class="skill-group-title">IT &amp; Systems</h3>
+        <div class="skill-list">
+          <span class="skill-tag">IT Support</span>
+          <span class="skill-tag">Hardware &amp; Software Support</span>
+          <span class="skill-tag">Network Administration</span>
+          <span class="skill-tag">System Administration</span>
+          <span class="skill-tag">IT Asset Management</span>
+          <span class="skill-tag">Cybersecurity</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3 class="skill-group-title">Data &amp; Analytics</h3>
+        <div class="skill-list">
+          <span class="skill-tag">Database Management</span>
+          <span class="skill-tag">Data Analysis</span>
+          <span class="skill-tag">Data Visualization</span>
+          <span class="skill-tag">Statistical Analysis</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3 class="skill-group-title">Development &amp; Automation</h3>
+        <div class="skill-list">
+          <span class="skill-tag">Programming</span>
+          <span class="skill-tag">AI Automation</span>
+          <span class="skill-tag">Prompt Engineering</span>
+          <span class="skill-tag">Process Optimization</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3 class="skill-group-title">Productivity &amp; Documentation</h3>
+        <div class="skill-list">
+          <span class="skill-tag">Microsoft Office</span>
+          <span class="skill-tag">Google Workspace</span>
+          <span class="skill-tag">Technical Documentation</span>
+          <span class="skill-tag">Administrative Support</span>
+          <span class="skill-tag">Graphic Design</span>
+        </div>
+      </div>
     </div>
   </section>
 
