@@ -904,7 +904,8 @@
       position:static; transform:none; pointer-events:none;
       background:transparent; border:none; box-shadow:none;
       min-width:0; padding:0; margin:0;
-      max-height:0; opacity:0; visibility:hidden; overflow:hidden;
+      max-height:0; opacity:0; visibility:hidden;
+      overflow-x:visible; overflow-y:hidden;
       transition:max-height .28s ease, opacity .2s ease, visibility .2s ease;
     }
     .nav-dropdown.open .nav-drop-menu{
@@ -913,10 +914,11 @@
     }
     .nav-drop-menu a{
       box-sizing:border-box;
+      width:100%;
       padding:10px; font-size:13px; font-weight:500;
       color:var(--text-dim);
       background:color-mix(in srgb, var(--border) 45%, transparent);
-      border-radius:10px; margin:3px 4px;
+      border-radius:10px; margin:3px 0;
     }
     .nav-drop-menu a.active{color:#0b0d12;}
 
@@ -1707,6 +1709,7 @@
       loader.classList.add('loader-hidden');
       document.documentElement.classList.remove('loading-lock');
       setTimeout(() => { loader.remove(); }, 950);
+      initMainSite();
     }
 
     window.addEventListener('load', () => {
@@ -1716,6 +1719,27 @@
     // safety net in case 'load' never fires for some reason
     setTimeout(hideLoader, 6000);
   })();
+
+  // ---------- light / dark mode: set immediately, not gated behind the ----------
+  // loader, so the loader itself (which uses the --bg variable) always
+  // matches the visitor's theme instead of flashing dark-then-light.
+  const root = document.documentElement;
+  function setTheme(mode){
+    if(mode === 'light'){ root.setAttribute('data-theme','light'); }
+    else { root.removeAttribute('data-theme'); }
+  }
+  const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+  setTheme(prefersLight ? 'light' : 'dark');
+
+  // ============================================================
+  // Everything below sets up the actual site — nav, animations,
+  // typing effect, lazy image loading, modals, etc. It's wrapped
+  // in a function and only called once the loader has finished
+  // (see hideLoader() above), so none of it runs, animates, or
+  // starts fetching images while the loader is still covering
+  // the page.
+  // ============================================================
+  function initMainSite(){
 
   // ---------- scroll reveal ----------
   const revealEls = document.querySelectorAll('.reveal');
@@ -1839,17 +1863,9 @@
   // the onload/onerror attributes already on each <img> tag.
   // ============================================================
 
-  // ---------- light / dark mode ----------
-  const root = document.documentElement;
+  // ---------- light / dark mode: toggle button ----------
   const themeBtn = document.getElementById('themeToggle');
   const tsThumb = document.getElementById('tsThumb');
-
-  function setTheme(mode){
-    if(mode === 'light'){ root.setAttribute('data-theme','light'); }
-    else { root.removeAttribute('data-theme'); }
-  }
-  const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-  setTheme(prefersLight ? 'light' : 'dark');
 
   themeBtn.addEventListener('click', () => {
     setTheme(root.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
@@ -2091,6 +2107,8 @@
     backBtn.classList.toggle('show', nearBottom);
   });
   backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  } // end initMainSite
 </script>
 
 </body>
