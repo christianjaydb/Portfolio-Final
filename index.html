@@ -1761,6 +1761,13 @@
   });
   window.addEventListener('resize', () => { if(window.innerWidth > 640) closeNav(); });
 
+  // close the mobile menu when tapping/clicking anywhere outside the nav pill
+  document.addEventListener('click', (e) => {
+    if(!navLinksEl.classList.contains('open')) return;
+    const navPill = navToggle.closest('nav.pill');
+    if(navPill && !navPill.contains(e.target)) closeNav();
+  });
+
   // ---------- nav active state on scroll ----------
   const navLinks = document.querySelectorAll('nav.pill a');
   const sections = [...navLinks].map(a => document.querySelector(a.getAttribute('href')));
