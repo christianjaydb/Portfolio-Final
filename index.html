@@ -286,6 +286,13 @@
   .role-line .cursor{display:inline-block; width:9px; background:var(--gold); margin-left:2px; animation:blink 1s step-end infinite;}
   @keyframes blink{50%{opacity:0;}}
 
+  .hero-tagline{
+    margin-top:10px;
+    font-size:13.5px; color:var(--text-dim);
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  }
+  .hero-tagline .sep{color:var(--gold); opacity:.7; flex:none;}
+
   .contact-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:16px;}
   .contact-chip{
     display:flex; align-items:center; gap:8px;
@@ -846,6 +853,7 @@
   @media(max-width:900px){
     .hero-grid{grid-template-columns:1fr; text-align:center; justify-items:center;}
     .contact-row{justify-content:center;}
+    .hero-tagline{justify-content:center;}
     .cv-actions{justify-content:center;}
     .edu-grid{grid-template-columns:1fr; text-align:center;}
     .uni-mark{order:-1;}
@@ -1028,6 +1036,12 @@
         <h1>Hi, I'm <span>Christian</span></h1>
         <div class="role-line"><span id="roleText"></span><span class="cursor"></span></div>
 
+        <div class="hero-tagline">
+          <span>Computer Technology Graduate</span>
+          <span class="sep">|</span>
+          <span>Aspiring IT Professional</span>
+        </div>
+
         <div class="contact-row">
           <a class="contact-chip" href="https://wa.me/639062190209" target="_blank" rel="noopener">
             <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -1060,7 +1074,7 @@
       <div>
         <div class="edu-block">
           <h3>College of Engineering Technology</h3>
-          <div class="sub">Bachelor of Industrial Technology, Major in Computer Technology</div>
+          <div class="sub">Bachelor of Industrial Technology, major in Computer Technology</div>
           <span class="edu-tag">Dean's Lister · A.Y. 2023–2025</span>
         </div>
       </div>
