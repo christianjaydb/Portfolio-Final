@@ -309,6 +309,73 @@
   .cv-download:hover{transform:translateY(-2px); box-shadow:0 8px 24px color-mix(in srgb, var(--gold) 45%, transparent);}
   .cv-download .ic{width:16px;height:16px; flex:none;}
 
+  .cv-actions{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+  .cv-actions .cv-download{margin-top:14px;}
+
+  .cv-preview-btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:9px;
+    background:var(--panel);
+    color:var(--text);
+    border:1.5px solid var(--gold);
+    padding:11px 22px; border-radius:999px;
+    font-family:var(--body); font-size:13px; font-weight:600; letter-spacing:0.02em; line-height:1;
+    margin-top:14px;
+    cursor:pointer;
+    box-shadow:0 4px 14px rgba(0,0,0,0.12);
+    transition:background .25s ease, color .25s ease, transform .2s ease, box-shadow .25s ease;
+  }
+  .cv-preview-btn:hover, .cv-preview-btn:focus-visible{
+    background:linear-gradient(120deg,var(--gold-soft),var(--gold));
+    color:#1a1204;
+    transform:translateY(-2px);
+    box-shadow:0 8px 24px color-mix(in srgb, var(--gold) 40%, transparent);
+    outline:none;
+  }
+  .cv-preview-btn .ic{width:16px;height:16px; flex:none;}
+
+  /* ---------- CV PREVIEW MODAL ---------- */
+  .cv-modal-overlay{
+    position:fixed; inset:0; z-index:300;
+    background:rgba(6,7,10,0.6);
+    backdrop-filter:blur(4px);
+    display:flex; align-items:center; justify-content:center;
+    padding:24px;
+    opacity:0; visibility:hidden; pointer-events:none;
+    transition:opacity .22s ease, visibility .22s ease;
+  }
+  .cv-modal-overlay.open{opacity:1; visibility:visible; pointer-events:auto;}
+  .cv-modal{
+    width:100%; max-width:760px; max-height:88vh;
+    background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+    box-shadow:var(--shadow-lg);
+    padding:22px 22px 26px;
+    display:flex; flex-direction:column; gap:14px;
+    transform:translateY(14px) scale(.98);
+    transition:transform .22s ease;
+  }
+  .cv-modal-overlay.open .cv-modal{transform:translateY(0) scale(1);}
+  .cv-modal-head{display:flex; align-items:center; justify-content:space-between; gap:14px;}
+  .cv-modal-title{font-size:16px; font-weight:700; color:var(--text);}
+  .cv-modal-close{
+    flex:none; width:30px; height:30px; border-radius:50%;
+    border:1px solid var(--border); background:var(--panel-2); color:var(--text-dim);
+    font-size:15px; line-height:1; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:border-color .2s ease, color .2s ease;
+  }
+  .cv-modal-close:hover, .cv-modal-close:focus-visible{border-color:var(--gold); color:var(--text); outline:none;}
+  .cv-modal-frame-wrap{
+    flex:1; min-height:0;
+    background:var(--panel-2); border:1px solid var(--border); border-radius:10px;
+    overflow:hidden;
+  }
+  .cv-modal-frame-wrap iframe{width:100%; height:100%; min-height:60vh; border:0; display:block;}
+  .cv-modal-foot{display:flex; justify-content:flex-end;}
+  @media (max-width:600px){
+    .cv-modal{padding:16px 16px 20px;}
+    .cv-modal-frame-wrap iframe{min-height:52vh;}
+  }
+
   /* ---------- SECTION HEADERS (signature) ---------- */
   .section{padding:64px 0;}
   .section-head{
@@ -757,6 +824,7 @@
   @media(max-width:900px){
     .hero-grid{grid-template-columns:1fr; text-align:center; justify-items:center;}
     .contact-row{justify-content:center;}
+    .cv-actions{justify-content:center;}
     .edu-grid{grid-template-columns:1fr; text-align:center;}
     .uni-mark{order:-1;}
     .awards-col{height:auto;}
@@ -953,10 +1021,12 @@
           </a>
         </div>
 
-        <a class="cv-download" href="CV_Belen.pdf" download="Belen_Christian_Jay_D_CV.pdf">
-          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download CV
-        </a>
+        <div class="cv-actions">
+          <button type="button" class="cv-preview-btn" id="cvPreviewOpen">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            Preview CV
+          </button>
+        </div>
       </div>
     </div>
   </section>
@@ -1525,6 +1595,24 @@
 
 <button id="backToTop" aria-label="Back to top">↑</button>
 
+<div class="cv-modal-overlay" id="cvModalOverlay">
+  <div class="cv-modal" role="dialog" aria-modal="true" aria-labelledby="cvModalTitle">
+    <div class="cv-modal-head">
+      <div class="cv-modal-title" id="cvModalTitle">CV Preview</div>
+      <button type="button" class="cv-modal-close" id="cvModalClose" aria-label="Close">✕</button>
+    </div>
+    <div class="cv-modal-frame-wrap">
+      <iframe id="cvModalFrame" src="" title="CV preview"></iframe>
+    </div>
+    <div class="cv-modal-foot">
+      <a class="cv-download" href="CV_Belen.pdf" download="Belen_Christian_Jay_D_CV.pdf">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download CV
+      </a>
+    </div>
+  </div>
+</div>
+
 <div class="role-modal-overlay" id="roleModalOverlay">
   <div class="role-modal" role="dialog" aria-modal="true" aria-labelledby="roleModalTitle">
     <div class="role-modal-head">
@@ -1751,6 +1839,37 @@
     }, { rootMargin: '600px 0px', threshold: 0 });
 
     lazyImgs.forEach(img => io.observe(img));
+  })();
+
+  // ---------- CV preview modal ----------
+  (function(){
+    const openBtn = document.getElementById('cvPreviewOpen');
+    const overlay = document.getElementById('cvModalOverlay');
+    const closeBtn = document.getElementById('cvModalClose');
+    const frame = document.getElementById('cvModalFrame');
+    const CV_SRC = 'CV_Belen.pdf';
+    let lastFocused = null;
+
+    function openModal(){
+      if(!frame.src) frame.src = CV_SRC;
+      lastFocused = document.activeElement;
+      overlay.classList.add('open');
+      closeBtn.focus();
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(){
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+      if(lastFocused) lastFocused.focus();
+    }
+
+    openBtn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', (e) => { if(e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+    });
   })();
 
   // ---------- role modals (work experience & leadership responsibilities) ----------
