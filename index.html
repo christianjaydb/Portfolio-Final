@@ -890,7 +890,9 @@
       opacity:0; visibility:hidden; transform:translateY(-8px);
       transition:opacity .22s ease, transform .22s ease, visibility .22s ease;
       max-height:70vh; overflow-y:auto;
+      scrollbar-width:none; -ms-overflow-style:none;
     }
+    .nav-links::-webkit-scrollbar{display:none;}
     .nav-links.open{opacity:1; visibility:visible; transform:translateY(0);}
     .nav-links a{width:100%; text-align:center; padding:12px; font-size:13.5px; color:var(--text); font-weight:500;}
     .nav-links a.active{font-weight:600;}
