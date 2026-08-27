@@ -108,16 +108,19 @@
   .nav-dropdown::after{
     content:""; position:absolute; left:0; right:0; top:100%; height:14px;
   }
-  .nav-drop-trigger{display:inline-flex; align-items:center; gap:5px; cursor:pointer;}
+  .nav-drop-trigger{display:inline-flex; align-items:center; gap:6px; cursor:pointer;}
   .drop-caret{
-    font-size:12px; line-height:1; color:var(--gold); opacity:.9;
-    transition:transform .22s ease, opacity .22s ease;
+    display:inline-flex; flex:none;
+    width:9px; height:9px;
+    color:var(--gold); opacity:.85;
+    transition:transform .25s cubic-bezier(.4,0,.2,1), opacity .22s ease;
   }
+  .drop-caret svg{width:100%; height:100%; display:block;}
   .nav-dropdown.open .drop-caret{transform:rotate(180deg); opacity:1;}
 
   .nav-drop-menu{
     position:absolute; top:calc(100% + 10px); left:50%; transform:translateX(-50%) translateY(-6px);
-    min-width:168px; padding:8px;
+    min-width:172px; padding:8px;
     background:var(--nav-bg); backdrop-filter:blur(14px) saturate(140%);
     border:1px solid var(--border); border-radius:14px;
     box-shadow:0 14px 30px rgba(0,0,0,0.3);
@@ -130,13 +133,13 @@
     opacity:1; visibility:visible; pointer-events:auto; transform:translateX(-50%) translateY(0);
   }
   .nav-drop-menu a{
-    display:block; text-align:center;
+    display:flex; align-items:center; justify-content:center; gap:7px;
     padding:9px 14px; border-radius:10px;
     font-family:var(--mono); font-size:12.5px; letter-spacing:0.03em;
     color:var(--text-dim);
     transition:color .2s ease, background .2s ease;
   }
-  .nav-drop-menu a.active{color:#0b0d12; background:linear-gradient(120deg,var(--gold-soft),var(--gold));}
+  .nav-drop-menu a.active{color:#0b0d12; background:linear-gradient(120deg,var(--gold-soft),var(--gold)); box-shadow:0 4px 14px color-mix(in srgb, var(--gold) 35%, transparent);}
 
   /* Hover-only enhancements — scoped so touch taps (which fake :hover on many
      phones) can never trigger the desktop hover/focus states or transforms.
@@ -1003,7 +1006,10 @@
       <a href="#leadership">Leadership</a>
       <div class="nav-dropdown" id="projectsDropdown">
         <a href="#projects" class="nav-drop-trigger" aria-haspopup="true" aria-expanded="false">
-          Projects <span class="drop-caret">▾</span>
+          Projects
+          <span class="drop-caret">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
         </a>
         <div class="nav-drop-menu">
           <a href="#proj-websites">Websites</a>
