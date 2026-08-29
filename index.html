@@ -139,7 +139,7 @@
     color:var(--text-dim);
     transition:color .2s ease, background .2s ease;
   }
-  .nav-drop-menu a.active{color:#0b0d12; background:linear-gradient(120deg,var(--gold-soft),var(--gold)); box-shadow:0 4px 14px color-mix(in srgb, var(--gold) 35%, transparent);}
+  .nav-drop-menu a.active{color:#0b0d12; background:linear-gradient(120deg,var(--gold-soft),var(--gold)); font-weight:700;}
 
   /* ---------- collapsed / hamburger nav ----------
      Applied via JS (.nav-compact on nav.pill) the instant the links can't
@@ -191,14 +191,21 @@
     background:color-mix(in srgb, var(--border) 45%, transparent);
     border-radius:10px; margin:3px 0;
   }
-  nav.pill.nav-compact .nav-drop-menu a.active{color:#0b0d12;}
+  nav.pill.nav-compact .nav-drop-menu a.active{color:#0b0d12; font-weight:700;}
 
   /* Fallback: guarantee compact mode on real phone widths even before JS
-     has run (e.g. very first paint), independent of the JS measurement. */
+     has run (e.g. very first paint), independent of the JS measurement.
+     !important is required here: without it, this rule loses the cascade
+     tie-break to the later unscoped .nav-toggle{display:none} / .nav-links
+     rules further down (same specificity, later source order wins), which
+     silently disabled this entire safety net. */
   @media(max-width:480px){
     nav.pill{justify-content:space-between; flex-wrap:nowrap; padding:10px 14px; position:relative;}
-    .nav-toggle{display:flex;}
-    .nav-links{opacity:0; visibility:hidden;}
+    .nav-toggle{display:flex !important;}
+    /* :not(.open) so this pre-JS hidden state can never fight the reveal
+       rule once the menu (or its Projects dropdown) has actually been
+       opened, regardless of whether nav-compact has been added yet. */
+    .nav-links:not(.open){opacity:0 !important; visibility:hidden !important;}
   }
 
   /* Hover-only enhancements — scoped so touch taps (which fake :hover on many
@@ -1948,7 +1955,25 @@
   }
 
   projectsTrigger.addEventListener('click', (e) => {
+    // Decide purely on isCompact (the hamburger/mobile layout), which JS
+    // measures directly from actual content width — reliable regardless of
+    // device. The previous version also required matchMedia('hover: hover')
+    // to be false before allowing click-to-toggle; some touchscreen tablets
+    // and hybrid laptops misreport that media feature as true even though
+    // they're being used by touch, which made the compact-mode branch
+    // unreachable on those devices and left the dropdown stuck closed (it
+    // would instead just navigate straight to #projects). isCompact alone
+    // is enough: in compact mode we always want click-to-toggle; outside of
+    // it, CSS hover already handles opening on desktop.
+    const isCompact = navPill.classList.contains('nav-compact');
+    if (!isCompact) {
+      closeProjectsDropdown();
+      return;
+    }
     e.preventDefault();
+    e.stopPropagation(); // keep this click from also being seen by the
+                          // document-level "click outside" listener below
+                          // in the same tick, on the same event.
     const isOpen = projectsDropdown.classList.toggle('open');
     projectsTrigger.setAttribute('aria-expanded', String(isOpen));
   });
