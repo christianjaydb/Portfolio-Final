@@ -141,6 +141,66 @@
   }
   .nav-drop-menu a.active{color:#0b0d12; background:linear-gradient(120deg,var(--gold-soft),var(--gold)); box-shadow:0 4px 14px color-mix(in srgb, var(--gold) 35%, transparent);}
 
+  /* ---------- collapsed / hamburger nav ----------
+     Applied via JS (.nav-compact on nav.pill) the instant the links can't
+     fit on one line — not tied to a fixed viewport breakpoint, so odd
+     window sizes never show a wrapped two-line pill. A max-width fallback
+     further down still forces this on true phone widths even if JS is slow. */
+  nav.pill.nav-compact{
+    justify-content:space-between; flex-wrap:nowrap;
+    padding:10px 14px; position:relative;
+  }
+  nav.pill.nav-compact .nav-toggle{display:flex;}
+  nav.pill.nav-compact .nav-links{
+    position:absolute; top:calc(100% + 10px); left:0; right:0;
+    flex-direction:column; align-items:stretch; gap:4px;
+    background:color-mix(in srgb, var(--panel) 96%, transparent);
+    backdrop-filter:blur(18px) saturate(140%);
+    border:1px solid var(--border); border-radius:16px; padding:10px;
+    box-shadow:0 14px 34px rgba(0,0,0,0.4);
+    opacity:0; visibility:hidden; transform:translateY(-8px);
+    transition:opacity .22s ease, transform .22s ease, visibility .22s ease;
+    max-height:70vh; overflow-y:auto; overflow-x:hidden;
+    scrollbar-width:none; -ms-overflow-style:none;
+    -webkit-transform:translate3d(0,0,0); isolation:isolate;
+  }
+  nav.pill.nav-compact .nav-links::-webkit-scrollbar{display:none;}
+  nav.pill.nav-compact .nav-links.open{opacity:1; visibility:visible; transform:translate3d(0,0,0);}
+  nav.pill.nav-compact .nav-links a{width:100%; text-align:center; padding:12px; font-size:13.5px; color:var(--text); font-weight:500;}
+  nav.pill.nav-compact .nav-links a.active{font-weight:600;}
+
+  nav.pill.nav-compact .nav-dropdown{width:100%;}
+  nav.pill.nav-compact .nav-drop-trigger{width:100%; justify-content:center; padding:12px; font-size:13.5px; color:var(--text); font-weight:500;}
+  nav.pill.nav-compact .nav-drop-menu{
+    position:static; transform:none; pointer-events:none;
+    background:transparent; border:none; box-shadow:none;
+    min-width:0; padding:0; margin:0;
+    max-height:0; opacity:0; visibility:hidden;
+    overflow-x:visible; overflow-y:hidden;
+    transition:max-height .28s ease, opacity .2s ease, visibility .2s ease;
+  }
+  nav.pill.nav-compact .nav-dropdown.open .nav-drop-menu{
+    transform:none;
+    max-height:240px; opacity:1; visibility:visible; pointer-events:auto; padding:2px 0 6px;
+  }
+  nav.pill.nav-compact .nav-drop-menu a{
+    box-sizing:border-box;
+    width:100%;
+    padding:10px; font-size:13px; font-weight:500;
+    color:var(--text-dim);
+    background:color-mix(in srgb, var(--border) 45%, transparent);
+    border-radius:10px; margin:3px 0;
+  }
+  nav.pill.nav-compact .nav-drop-menu a.active{color:#0b0d12;}
+
+  /* Fallback: guarantee compact mode on real phone widths even before JS
+     has run (e.g. very first paint), independent of the JS measurement. */
+  @media(max-width:480px){
+    nav.pill{justify-content:space-between; flex-wrap:nowrap; padding:10px 14px; position:relative;}
+    .nav-toggle{display:flex;}
+    .nav-links{opacity:0; visibility:hidden;}
+  }
+
   /* Hover-only enhancements — scoped so touch taps (which fake :hover on many
      phones) can never trigger the desktop hover/focus states or transforms.
      Mobile relies purely on the JS-driven .open class above, which is what
@@ -470,7 +530,7 @@
   }
   .edu-block{margin-bottom:26px;}
   .edu-tag{
-    display:inline-block; margin-top:10px;
+    display:block; width:fit-content; margin:10px auto 0;
     font-family:var(--mono); font-size:12px; font-weight:600; letter-spacing:.05em;
     color:var(--gold-soft);
     border:1.5px solid color-mix(in srgb, var(--gold) 60%, transparent);
@@ -909,53 +969,6 @@
     .wrap{padding:0 18px;}
     header.site-nav{padding:0 10px; top:10px;}
     .theme-switch{margin-left:4px;}
-
-    nav.pill{
-      justify-content:space-between; flex-wrap:nowrap;
-      padding:10px 14px; position:relative;
-    }
-    .nav-toggle{display:flex;}
-    .nav-links{
-      position:absolute; top:calc(100% + 10px); left:0; right:0;
-      flex-direction:column; align-items:stretch; gap:4px;
-      background:color-mix(in srgb, var(--panel) 96%, transparent);
-      backdrop-filter:blur(18px) saturate(140%);
-      border:1px solid var(--border); border-radius:16px; padding:10px;
-      box-shadow:0 14px 34px rgba(0,0,0,0.4);
-      opacity:0; visibility:hidden; transform:translateY(-8px);
-      transition:opacity .22s ease, transform .22s ease, visibility .22s ease;
-      max-height:70vh; overflow-y:auto; overflow-x:hidden;
-      scrollbar-width:none; -ms-overflow-style:none;
-      -webkit-transform:translate3d(0,0,0); isolation:isolate;
-    }
-    .nav-links::-webkit-scrollbar{display:none;}
-    .nav-links.open{opacity:1; visibility:visible; transform:translate3d(0,0,0);}
-    .nav-links a{width:100%; text-align:center; padding:12px; font-size:13.5px; color:var(--text); font-weight:500;}
-    .nav-links a.active{font-weight:600;}
-
-    .nav-dropdown{width:100%;}
-    .nav-drop-trigger{width:100%; justify-content:center; padding:12px; font-size:13.5px; color:var(--text); font-weight:500;}
-    .nav-drop-menu{
-      position:static; transform:none; pointer-events:none;
-      background:transparent; border:none; box-shadow:none;
-      min-width:0; padding:0; margin:0;
-      max-height:0; opacity:0; visibility:hidden;
-      overflow-x:visible; overflow-y:hidden;
-      transition:max-height .28s ease, opacity .2s ease, visibility .2s ease;
-    }
-    .nav-dropdown.open .nav-drop-menu{
-      transform:none;
-      max-height:240px; opacity:1; visibility:visible; pointer-events:auto; padding:2px 0 6px;
-    }
-    .nav-drop-menu a{
-      box-sizing:border-box;
-      width:100%;
-      padding:10px; font-size:13px; font-weight:500;
-      color:var(--text-dim);
-      background:color-mix(in srgb, var(--border) 45%, transparent);
-      border-radius:10px; margin:3px 0;
-    }
-    .nav-drop-menu a.active{color:#0b0d12;}
 
     .hero{padding:40px 0 28px;}
     .photo-ring{width:112px; height:112px;}
@@ -1823,8 +1836,10 @@
   document.getElementById('year').textContent = new Date().getFullYear();
 
   // ---------- mobile nav toggle ----------
+  const navPill = document.getElementById('navPill');
   const navToggle = document.getElementById('navToggle');
   const navLinksEl = document.getElementById('navLinks');
+  const themeToggleEl = document.getElementById('themeToggle');
 
   function closeNav(){
     navLinksEl.classList.remove('open');
@@ -1840,7 +1855,72 @@
   navLinksEl.querySelectorAll('a').forEach(a => {
     if (!a.classList.contains('nav-drop-trigger')) a.addEventListener('click', closeNav);
   });
-  window.addEventListener('resize', () => { if(window.innerWidth > 640) closeNav(); });
+
+  // ---------- fit-based nav collapse ----------
+  // Rather than switching to the hamburger at one fixed viewport breakpoint
+  // (which leaves odd in-between widths where the links wrap to a second
+  // line — the pill growing tall instead of collapsing), measure whether
+  // the links actually fit on one row and flip to compact mode the instant
+  // they don't, at any width.
+  function measureNavRequiredWidth(){
+    // Measure in expanded (non-compact) layout terms, regardless of the
+    // pill's current mode, so the .nav-compact-scoped rules never leak
+    // into the clone's layout.
+    const wasCompact = navPill.classList.contains('nav-compact');
+    if (wasCompact) navPill.classList.remove('nav-compact');
+
+    const clone = navLinksEl.cloneNode(true);
+    clone.classList.remove('open');
+    clone.style.cssText = 'position:absolute; visibility:hidden; pointer-events:none; left:-9999px; top:0; right:auto; display:flex; flex-direction:row; flex-wrap:nowrap; align-items:center; width:auto; max-height:none; white-space:nowrap; background:none; border:none; box-shadow:none; padding:0; margin:0; opacity:1; transform:none;';
+    navPill.appendChild(clone);
+    const width = clone.scrollWidth;
+    navPill.removeChild(clone);
+
+    if (wasCompact) navPill.classList.add('nav-compact');
+    return width;
+  }
+
+  function updateNavFit(){
+    const wasCompact = navPill.classList.contains('nav-compact');
+    // Measure against the pill's full inner width (padding excluded) as if
+    // expanded — the toggle button is hidden in expanded mode so it doesn't
+    // need to be reserved for. The theme switch stays visible in both
+    // modes, so its width (plus its own margin and the row gap) must be
+    // reserved too, or it can get pushed onto its own line instead of the
+    // pill collapsing to the hamburger.
+    const pillStyle = getComputedStyle(navPill);
+    const innerWidth = navPill.clientWidth - parseFloat(pillStyle.paddingLeft) - parseFloat(pillStyle.paddingRight);
+    const rowGap = parseFloat(pillStyle.columnGap || pillStyle.gap) || 0;
+
+    let themeWidth = 0;
+    if (themeToggleEl) {
+      const themeStyle = getComputedStyle(themeToggleEl);
+      themeWidth = themeToggleEl.getBoundingClientRect().width + parseFloat(themeStyle.marginLeft) + rowGap;
+    }
+
+    const required = measureNavRequiredWidth() + themeWidth;
+    const fits = required <= innerWidth + 4;
+
+    navPill.classList.toggle('nav-compact', !fits);
+    navToggle.setAttribute('aria-hidden', String(fits));
+
+    if (fits && wasCompact) closeNav();
+  }
+
+  let navFitRAF = null;
+  function scheduleNavFit(){
+    if (navFitRAF) cancelAnimationFrame(navFitRAF);
+    navFitRAF = requestAnimationFrame(updateNavFit);
+  }
+
+  scheduleNavFit();
+  window.addEventListener('resize', scheduleNavFit);
+  if (window.ResizeObserver) {
+    new ResizeObserver(scheduleNavFit).observe(navPill);
+  }
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(scheduleNavFit).catch(() => {});
+  }
 
   // close the mobile menu when tapping/clicking anywhere outside the nav pill
   document.addEventListener('click', (e) => {
