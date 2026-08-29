@@ -1949,16 +1949,21 @@
   }, { passive: true });
 
   // ---------- nav active state on scroll ----------
-  // Exclude the Projects trigger itself — it's a dropdown opener, not a
-  // real destination link, so it shouldn't pick up the gold "selected"
-  // pill state on scroll (desktop or mobile). Its submenu items (Websites/
-  // Designs/Case Studies) still get highlighted normally.
-  const navLinks = [...document.querySelectorAll('nav.pill a')].filter(a => !a.classList.contains('nav-drop-trigger'));
+  // The Projects trigger's own section (#projects) is tracked here so that
+  // Leadership's gold highlight doesn't stay stuck once you scroll past it
+  // into the Projects section header — but the trigger itself is excluded
+  // from ever receiving the gold "active" pill (it's a dropdown opener, not
+  // a real destination, and painting it gold read as visually noisy). Net
+  // effect: no top-level pill is gold while you're in the Projects header;
+  // gold picks back up once you reach a submenu-tracked subsection
+  // (Websites/Designs/Case Studies).
+  const navLinks = [...document.querySelectorAll('nav.pill a')];
+  const highlightable = navLinks.filter(a => !a.classList.contains('nav-drop-trigger'));
   const sections = navLinks.map(a => document.querySelector(a.getAttribute('href')));
   window.addEventListener('scroll', () => {
     let current = sections[0];
     sections.forEach(s => { if (s && window.scrollY >= s.offsetTop - 140) current = s; });
-    navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current.id));
+    highlightable.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current.id));
   });
 
   // ---------- projects dropdown (click + touch support, not just hover) ----------
