@@ -1940,6 +1940,14 @@
     if(navPill && !navPill.contains(e.target)) closeNav();
   });
 
+  // close the mobile menu (and its Projects dropdown) as soon as the page
+  // itself is scrolled while the menu is left open — scrolling *inside*
+  // the nav-links list (its own overflow-y:auto) doesn't fire this, since
+  // that's a separate element's scroll, not the window's.
+  window.addEventListener('scroll', () => {
+    if(navLinksEl.classList.contains('open')) closeNav();
+  }, { passive: true });
+
   // ---------- nav active state on scroll ----------
   const navLinks = document.querySelectorAll('nav.pill a');
   const sections = [...navLinks].map(a => document.querySelector(a.getAttribute('href')));
