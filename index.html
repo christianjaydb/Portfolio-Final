@@ -164,7 +164,20 @@
     transition:border-color .25s ease, background .25s ease;
   }
   .nav-toggle:hover, .nav-toggle:focus-visible{border-color:var(--gold); outline:none;}
-  .nav-toggle .ham-icon{font-size:16px; line-height:1;}
+  .nav-toggle .ham-icon{
+    position:relative; width:17px; height:13px; display:inline-block; flex:none;
+  }
+  .nav-toggle .ham-icon span{
+    position:absolute; left:0; width:100%; height:2px; border-radius:2px;
+    background:currentColor;
+    transition:top .32s cubic-bezier(.4,0,.2,1), transform .32s cubic-bezier(.4,0,.2,1), opacity .2s ease;
+  }
+  .nav-toggle .ham-icon span:nth-child(1){top:0;}
+  .nav-toggle .ham-icon span:nth-child(2){top:5.5px;}
+  .nav-toggle .ham-icon span:nth-child(3){top:11px;}
+  .nav-toggle.is-open .ham-icon span:nth-child(1){top:5.5px; transform:rotate(45deg);}
+  .nav-toggle.is-open .ham-icon span:nth-child(2){opacity:0; transform:scaleX(0);}
+  .nav-toggle.is-open .ham-icon span:nth-child(3){top:5.5px; transform:rotate(-45deg);}
 
   .theme-switch{
     position:relative;
@@ -1023,7 +1036,7 @@
 <header class="site-nav">
   <nav class="pill" id="navPill">
     <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navLinks">
-      <span class="ham-icon">☰</span>
+      <span class="ham-icon"><span></span><span></span><span></span></span>
     </button>
     <div class="nav-links" id="navLinks">
       <a href="#home" class="active">Home</a>
@@ -1815,14 +1828,14 @@
 
   function closeNav(){
     navLinksEl.classList.remove('open');
+    navToggle.classList.remove('is-open');
     navToggle.setAttribute('aria-expanded','false');
-    navToggle.querySelector('.ham-icon').textContent = '☰';
     closeProjectsDropdown();
   }
   navToggle.addEventListener('click', () => {
     const isOpen = navLinksEl.classList.toggle('open');
+    navToggle.classList.toggle('is-open', isOpen);
     navToggle.setAttribute('aria-expanded', String(isOpen));
-    navToggle.querySelector('.ham-icon').textContent = isOpen ? '✕' : '☰';
   });
   navLinksEl.querySelectorAll('a').forEach(a => {
     if (!a.classList.contains('nav-drop-trigger')) a.addEventListener('click', closeNav);
