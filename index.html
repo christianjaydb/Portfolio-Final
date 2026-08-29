@@ -296,7 +296,7 @@
   }
   .hero-tagline .sep{color:var(--gold); opacity:.7; flex:none;}
 
-  .contact-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:16px;}
+  .contact-row{display:flex; flex-wrap:wrap; align-items:center; gap:10px 10px; margin-top:16px;}
   .contact-chip{
     display:flex; align-items:center; gap:8px;
     background:var(--panel); border:1px solid var(--border);
@@ -319,17 +319,13 @@
   .cv-download:hover{transform:translateY(-2px); box-shadow:0 8px 24px color-mix(in srgb, var(--gold) 45%, transparent);}
   .cv-download .ic{width:16px;height:16px; flex:none;}
 
-  .cv-actions{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
-  .cv-actions .cv-download{margin-top:14px;}
-
   .cv-preview-btn{
     display:inline-flex; align-items:center; justify-content:center; gap:9px;
     background:var(--panel);
     color:var(--text);
     border:1.5px solid var(--gold);
-    padding:11px 22px; border-radius:999px;
-    font-family:var(--body); font-size:13px; font-weight:600; letter-spacing:0.02em; line-height:1;
-    margin-top:14px;
+    padding:8px 18px; border-radius:999px;
+    font-family:var(--body); font-size:12.5px; font-weight:600; letter-spacing:0.02em; line-height:1;
     cursor:pointer;
     box-shadow:0 4px 14px rgba(0,0,0,0.12);
     transition:background .25s ease, color .25s ease, transform .2s ease, box-shadow .25s ease;
@@ -341,7 +337,7 @@
     box-shadow:0 8px 24px color-mix(in srgb, var(--gold) 40%, transparent);
     outline:none;
   }
-  .cv-preview-btn .ic{width:16px;height:16px; flex:none;}
+  .cv-preview-btn .ic{width:15px;height:15px; flex:none;}
 
   /* ---------- CV PREVIEW MODAL ---------- */
   .cv-modal-overlay{
@@ -884,7 +880,6 @@
     .hero-grid{grid-template-columns:1fr; text-align:center; justify-items:center;}
     .contact-row{justify-content:center;}
     .hero-tagline{justify-content:center;}
-    .cv-actions{justify-content:center;}
     .edu-grid{grid-template-columns:1fr; text-align:center;}
     .uni-mark{order:-1;}
     .awards-col{height:auto;}
@@ -955,6 +950,7 @@
     .role-line{font-size:13.5px; margin-top:5px;}
     .contact-row{gap:8px; margin-top:14px;}
     .contact-chip{font-size:12px; padding:8px 12px;}
+    .cv-preview-btn{font-size:12px; padding:8px 16px;}
     .cv-download{font-size:12.5px; padding:9px 16px; margin-top:12px;}
 
     .section{padding:44px 0;}
@@ -1097,9 +1093,6 @@
             <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4 20-7z"/><path d="M22 2 11 13"/></svg>
             t.me/christianjaydb
           </a>
-        </div>
-
-        <div class="cv-actions">
           <button type="button" class="cv-preview-btn" id="cvPreviewOpen">
             <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             Preview CV
