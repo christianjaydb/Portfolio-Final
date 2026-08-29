@@ -139,7 +139,11 @@
     color:var(--text-dim);
     transition:color .2s ease, background .2s ease;
   }
-  .nav-drop-menu a.active{color:#0b0d12; background:linear-gradient(120deg,var(--gold-soft),var(--gold)); font-weight:700;}
+  /* Desktop only — match the top-level pill's active look exactly (fully
+     rounded stadium shape, regular weight) instead of the softer rounded-
+     rect/bold treatment. The mobile/compact version further down keeps its
+     own look, since a full stadium pill on a full-width list item looks odd. */
+  .nav-drop-menu a.active{color:#0b0d12; background:linear-gradient(120deg,var(--gold-soft),var(--gold)); border-radius:999px; font-weight:400;}
 
   /* ---------- collapsed / hamburger nav ----------
      Applied via JS (.nav-compact on nav.pill) the instant the links can't
