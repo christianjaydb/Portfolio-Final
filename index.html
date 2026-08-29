@@ -1949,8 +1949,12 @@
   }, { passive: true });
 
   // ---------- nav active state on scroll ----------
-  const navLinks = document.querySelectorAll('nav.pill a');
-  const sections = [...navLinks].map(a => document.querySelector(a.getAttribute('href')));
+  // Exclude the Projects trigger itself — it's a dropdown opener, not a
+  // real destination link, so it shouldn't pick up the gold "selected"
+  // pill state on scroll (desktop or mobile). Its submenu items (Websites/
+  // Designs/Case Studies) still get highlighted normally.
+  const navLinks = [...document.querySelectorAll('nav.pill a')].filter(a => !a.classList.contains('nav-drop-trigger'));
+  const sections = navLinks.map(a => document.querySelector(a.getAttribute('href')));
   window.addEventListener('scroll', () => {
     let current = sections[0];
     sections.forEach(s => { if (s && window.scrollY >= s.offsetTop - 140) current = s; });
