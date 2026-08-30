@@ -28,6 +28,8 @@
     --body: 'Poppins', sans-serif;
     --mono: 'Poppins', sans-serif;
     --nav-bg: rgba(23,28,39,0.78);
+    --btn-fill: var(--panel);
+    --btn-text: var(--text);
   }
 
   html[data-theme="light"]{
@@ -45,6 +47,8 @@
     --nav-bg: rgba(255,255,255,0.72);
     --shadow: 0 10px 28px rgba(80,60,20,0.10);
     --shadow-lg: 0 20px 44px rgba(80,60,20,0.14);
+    --btn-fill: var(--panel);
+    --btn-text: var(--text);
   }
 
   *{margin:0;padding:0;box-sizing:border-box;}
@@ -884,11 +888,14 @@
   .go-to-project{
     display:inline-flex; align-items:center; gap:7px;
     font-family:var(--mono); font-size:11.5px; font-weight:700; letter-spacing:.03em;
-    background:linear-gradient(120deg,var(--gold-soft),var(--gold));
-    color:#0b0d12; padding:10px 18px; border-radius:999px;
-    transition:transform .2s ease, filter .2s ease;
+    background:
+      linear-gradient(var(--btn-fill),var(--btn-fill)) padding-box,
+      linear-gradient(120deg,var(--gold-soft),var(--gold)) border-box;
+    border:2px solid transparent;
+    color:var(--btn-text); padding:8px 18px; border-radius:999px;
+    transition:transform .2s ease, filter .2s ease, box-shadow .2s ease, background .4s ease, color .4s ease;
   }
-  .go-to-project:hover{transform:translateY(-2px); filter:brightness(1.06);}
+  .go-to-project:hover{transform:translateY(-2px); filter:brightness(1.03); box-shadow:0 0 0 3px color-mix(in srgb, var(--gold) 22%, transparent);}
 
   /* ---------- POSTERS / PUBMATS (image preview -> original work) ----------
      Original masonry layout + natural image sizing, kept as-is. The lag
