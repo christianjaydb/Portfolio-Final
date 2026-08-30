@@ -572,35 +572,45 @@
     font-family:var(--display); font-weight:700; font-size:22px; letter-spacing:0; color:var(--text);
   }
   .edu-block .sub{
-    margin-top:6px; font-size:14.5px; color:var(--text-dim);
-    padding-bottom:8px; padding-left:12px;
-    border-bottom:1px solid var(--border);
-    border-left:3px solid var(--gold);
-    transition:color .3s ease, letter-spacing .3s ease, border-left-color .3s ease;
-    display:inline-block;
+    margin-top:10px; font-size:14.5px; color:var(--text-dim);
+    padding-bottom:9px;
+    border-bottom:1px solid var(--gold);
+    transition:color .35s cubic-bezier(.4,0,.2,1), transform .35s cubic-bezier(.4,0,.2,1);
+    display:inline-flex; align-items:center; gap:10px;
+    will-change:transform;
   }
   .edu-block .sub:hover{
     color:var(--text);
-    letter-spacing:0.015em;
-    border-left-color:var(--gold-soft);
+    transform:translateX(3px);
   }
+  .edu-block .sub:hover .sub-icon{
+    transform:scale(1.08);
+  }
+  .sub-icon{
+    width:24px; height:24px; flex:none; border-radius:7px;
+    background:linear-gradient(135deg,var(--gold),var(--gold-soft));
+    display:flex; align-items:center; justify-content:center;
+    color:#0b0d12;
+    transition:transform .35s cubic-bezier(.4,0,.2,1);
+  }
+  .sub-icon svg{width:13px; height:13px;}
   .edu-block{margin-bottom:26px;}
   .edu-tag{
     display:block; width:fit-content; margin:10px auto 0;
     font-family:var(--mono); font-size:12px; font-weight:600; letter-spacing:.05em;
-    color:var(--gold-soft);
-    border:1.5px solid color-mix(in srgb, var(--gold) 60%, transparent);
+    color:var(--btn-text);
+    background:
+      linear-gradient(var(--bg),var(--bg)) padding-box,
+      linear-gradient(120deg,var(--gold-soft),var(--gold)) border-box;
+    border:1px solid transparent;
     padding:6px 14px; border-radius:999px;
-    background:color-mix(in srgb, var(--gold) 16%, var(--panel));
-    box-shadow:0 1px 3px color-mix(in srgb, var(--gold) 12%, transparent);
-    transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease, letter-spacing .25s ease;
+    transition:transform .25s ease, box-shadow .25s ease, letter-spacing .25s ease, filter .25s ease;
     cursor:default;
   }
   .edu-tag:hover{
     transform:translateY(-2px);
     letter-spacing:.07em;
-    border-color:color-mix(in srgb, var(--gold) 90%, transparent);
-    background:color-mix(in srgb, var(--gold) 26%, var(--panel));
+    filter:brightness(1.05);
     box-shadow:0 6px 16px color-mix(in srgb, var(--gold) 25%, transparent);
   }
   .uni-mark{
@@ -677,7 +687,7 @@
     transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
   }
   .skill-group:hover{
-    transform:translateY(-4px); border-color:var(--gold);
+    border-color:var(--gold);
     box-shadow:var(--shadow-lg), 0 0 0 1px color-mix(in srgb, var(--gold) 22%, transparent);
   }
   .skill-group-head{display:flex; align-items:center; gap:11px;}
@@ -705,7 +715,6 @@
   .skill-tag:hover{
     color:var(--text); border-color:var(--gold);
     background:color-mix(in srgb, var(--gold) 14%, var(--panel));
-    transform:translateY(-2px);
   }
 
   /* ---------- CERTS ---------- */
@@ -871,18 +880,28 @@
   .subsection-title{
     font-family:var(--display); font-weight:700; font-size:19px; letter-spacing:0;
     color:var(--text);
-    display:inline-block;
+    display:inline-flex; align-items:center; gap:12px;
     margin:44px 0 22px;
-    padding:0 0 8px 14px;
-    border-left:3px solid var(--gold);
-    border-bottom:1px solid var(--border);
-    transition:color .3s ease, letter-spacing .3s ease, border-left-color .3s ease;
+    padding-bottom:11px;
+    border-bottom:1px solid var(--gold);
+    transition:color .35s cubic-bezier(.4,0,.2,1), transform .35s cubic-bezier(.4,0,.2,1);
     scroll-margin-top:110px;
+    will-change:transform;
   }
   .subsection-title:hover{
-    letter-spacing:0.015em;
-    border-left-color:var(--gold-soft);
+    transform:translateX(3px) !important;
   }
+  .subsection-title:hover .subsection-icon{
+    transform:scale(1.08);
+  }
+  .subsection-icon{
+    width:28px; height:28px; flex:none; border-radius:8px;
+    background:linear-gradient(135deg,var(--gold),var(--gold-soft));
+    display:flex; align-items:center; justify-content:center;
+    color:#0b0d12;
+    transition:transform .35s cubic-bezier(.4,0,.2,1);
+  }
+  .subsection-icon svg{width:14px; height:14px;}
   #projects .subsection-title:first-of-type{margin-top:0;}
 
   .project-grid{display:grid; grid-template-columns:1fr 1fr; gap:26px;}
@@ -911,6 +930,11 @@
   .stack-chip{
     font-family:var(--mono); font-size:10.5px; color:var(--text-dim);
     border:1px solid var(--border); padding:4px 10px; border-radius:999px;
+    transition:color .2s ease, border-color .2s ease, background .2s ease;
+  }
+  .stack-chip:hover{
+    color:var(--text); border-color:var(--gold);
+    background:color-mix(in srgb, var(--gold) 14%, var(--panel));
   }
   .project-link-row{
     position:relative; z-index:2; margin-top:22px;
@@ -1241,7 +1265,12 @@
       <div>
         <div class="edu-block">
           <h3>College of Engineering Technology</h3>
-          <div class="sub">Bachelor of Industrial Technology, major in Computer Technology</div>
+          <div class="sub">
+            <span class="sub-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg>
+            </span>
+            Bachelor of Industrial Technology, major in Computer Technology
+          </div>
           <span class="edu-tag">Dean's Lister · A.Y. 2023–2025</span>
         </div>
       </div>
@@ -1460,7 +1489,12 @@
     <div class="section-pill">Projects</div>
   </div>
 
-  <h3 class="subsection-title reveal" id="proj-websites">Websites</h3>
+  <h3 class="subsection-title reveal" id="proj-websites">
+    <span class="subsection-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></svg>
+    </span>
+    Websites
+  </h3>
   <div class="project-grid reveal">
 
     <!-- Project 1 -->
@@ -1622,7 +1656,12 @@
     </div>
   </div>
 
-  <h3 class="subsection-title reveal" id="proj-designs">Designs</h3>
+  <h3 class="subsection-title reveal" id="proj-designs">
+    <span class="subsection-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2a10 10 0 1 0 0 20 2.5 2.5 0 0 0 0-5h1.5a2 2 0 0 0 2-2 4 4 0 0 1 4-4V9a7 7 0 0 0-7.5-7Z"/></svg>
+    </span>
+    Designs
+  </h3>
   <div class="media-grid reveal">
 
     <a class="media-item" href="https://canva.link/gm33chj47fweh7e" target="_blank" rel="noopener noreferrer">
@@ -1747,7 +1786,12 @@
   </div>
 
 
-  <h3 class="subsection-title reveal" id="proj-casestudies">Case Studies</h3>
+  <h3 class="subsection-title reveal" id="proj-casestudies">
+    <span class="subsection-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="12" y2="17"/></svg>
+    </span>
+    Case Studies
+  </h3>
   <div class="project-grid reveal">
 
     <div class="project-card">
