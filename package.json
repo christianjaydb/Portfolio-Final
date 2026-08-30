@@ -1,0 +1,23 @@
+{
+  "name": "portfolio-final",
+  "version": "1.0.0",
+  "description": "Christian Jay's Portfolio Website",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/christianjaydb/Portfolio-Final.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/christianjaydb/Portfolio-Final/issues"
+  },
+  "homepage": "https://github.com/christianjaydb/Portfolio-Final#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
