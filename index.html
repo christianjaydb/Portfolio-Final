@@ -425,6 +425,51 @@
   }
   .cv-preview-btn .ic{width:15px;height:15px; flex:none;}
 
+  .music-btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    background:var(--panel); border:1px solid var(--border);
+    padding:8px 16px; border-radius:999px;
+    font-family:var(--body); font-size:12.5px; color:var(--text-dim);
+    cursor:pointer;
+    transition:border-color .25s ease, transform .2s ease, color .25s ease, background .25s ease;
+  }
+  .music-btn:hover, .music-btn:focus-visible{border-color:var(--gold); color:var(--text); transform:translateY(-2px); outline:none;}
+  .music-btn.playing{border-color:var(--gold); color:var(--text); background:color-mix(in srgb, var(--gold) 10%, var(--panel));}
+
+  /* minimal 3-bar glyph — doubles as the icon (static) and the "now playing"
+     indicator (animated); no separate play/pause artwork needed */
+  .music-bars{display:inline-flex; align-items:center; gap:2.5px; height:13px; flex:none;}
+  .music-bars span{
+    width:2px; border-radius:1px; background:currentColor;
+    height:5px; opacity:.65;
+    transition:opacity .2s ease, background-color .2s ease;
+  }
+  .music-bars span:nth-child(1){height:9px;}
+  .music-bars span:nth-child(2){height:13px;}
+  .music-bars span:nth-child(3){height:6px;}
+  .music-btn.playing .music-bars span{
+    background:var(--gold); opacity:1;
+    animation:musicBar 1.1s ease-in-out infinite;
+  }
+  .music-btn.playing .music-bars span:nth-child(1){animation-delay:-.6s;}
+  .music-btn.playing .music-bars span:nth-child(2){animation-delay:-.2s;}
+  .music-btn.playing .music-bars span:nth-child(3){animation-delay:-.9s;}
+  @keyframes musicBar{
+    0%,100%{transform:scaleY(0.55);}
+    50%{transform:scaleY(1);}
+  }
+
+  /* phones: collapse to a clean round icon button, matching size/weight of
+     the other hero controls, so it looks intentional whether or not the
+     text label is visible */
+  @media(max-width:640px){
+    .music-btn{
+      width:38px; height:38px; padding:0; gap:0;
+      border-radius:50%;
+    }
+    .music-btn #musicBtnLabel{display:none;}
+  }
+
   /* ---------- CV PREVIEW MODAL ---------- */
   .cv-modal-overlay{
     position:fixed; inset:0; z-index:300;
@@ -1136,10 +1181,21 @@
             <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             Preview CV
           </button>
+          <button type="button" class="music-btn" id="musicToggle" aria-pressed="false" aria-label="Play background music">
+            <span class="music-bars"><span></span><span></span><span></span></span>
+            <span id="musicBtnLabel">Play Music</span>
+          </button>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- Background music: replace the src on the <audio> tag below with your own
+       track (e.g. src="music.mp3"), or point it to a hosted audio file URL.
+       Drop the audio file in the same folder as this page if using a local file. -->
+  <audio id="bgMusic" loop preload="none">
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
 
   <!-- EDUCATION -->
   <section class="section" id="education">
@@ -2283,6 +2339,39 @@
     document.addEventListener('keydown', (e) => {
       if(e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
     });
+  })();
+
+  // ---------- background music toggle ----------
+  (function(){
+    const btn = document.getElementById('musicToggle');
+    const audio = document.getElementById('bgMusic');
+    const label = document.getElementById('musicBtnLabel');
+    if(!btn || !audio) return;
+
+    function setPlayingUI(isPlaying){
+      btn.classList.toggle('playing', isPlaying);
+      btn.setAttribute('aria-pressed', isPlaying ? 'true' : 'false');
+      btn.setAttribute('aria-label', isPlaying ? 'Pause background music' : 'Play background music');
+      label.textContent = isPlaying ? 'Pause Music' : 'Play Music';
+    }
+
+    btn.addEventListener('click', () => {
+      if(audio.paused){
+        audio.play()
+          .then(() => setPlayingUI(true))
+          .catch(() => {
+            label.textContent = 'Add music.mp3';
+            setPlayingUI(false);
+          });
+      } else {
+        audio.pause();
+        setPlayingUI(false);
+      }
+    });
+
+    audio.addEventListener('ended', () => setPlayingUI(false)); // won't fire while loop=true, kept as a safety net
+    audio.addEventListener('pause', () => setPlayingUI(false));
+    audio.addEventListener('play', () => setPlayingUI(true));
   })();
 
   // ---------- back to top (shows near end of page) ----------
