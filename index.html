@@ -996,16 +996,19 @@
   #backToTop{
     position:fixed; right:26px; bottom:26px; z-index:200;
     width:48px; height:48px; border-radius:50%;
-    background:linear-gradient(120deg,var(--gold-soft),var(--gold));
-    color:#0b0d12; border:none; cursor:pointer;
+    background:
+      linear-gradient(var(--btn-fill),var(--btn-fill)) padding-box,
+      linear-gradient(120deg,var(--gold-soft),var(--gold)) border-box;
+    border:2px solid transparent;
+    color:var(--gold-soft); cursor:pointer;
     display:flex; align-items:center; justify-content:center;
     font-size:18px; font-weight:800;
-    box-shadow:0 10px 26px rgba(0,0,0,0.4);
+    box-shadow:0 10px 26px rgba(0,0,0,0.25);
     opacity:0; visibility:hidden; transform:translateY(14px);
-    transition:opacity .3s ease, transform .3s ease, visibility .3s ease;
+    transition:opacity .3s ease, transform .3s ease, visibility .3s ease, filter .2s ease, box-shadow .2s ease, background .4s ease, color .4s ease;
   }
   #backToTop.show{opacity:1; visibility:visible; transform:translateY(0);}
-  #backToTop:hover{transform:translateY(-3px);}
+  #backToTop:hover{transform:translateY(-3px); filter:brightness(1.03); box-shadow:0 0 0 3px color-mix(in srgb, var(--gold) 22%, transparent);}
 
   /* ---------- RESPONSIVE ---------- */
   @media(max-width:900px){
