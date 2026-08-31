@@ -680,15 +680,7 @@
   }
   .skill-group{
     display:flex; flex-direction:column; gap:16px;
-    background:linear-gradient(160deg,var(--panel-2),var(--panel));
-    border:1px solid var(--border); border-radius:var(--radius);
-    padding:22px 20px;
-    box-shadow:var(--shadow);
-    transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
-  }
-  .skill-group:hover{
-    transform:translateY(-5px); border-color:var(--gold);
-    box-shadow:var(--shadow-lg), 0 0 0 1px color-mix(in srgb, var(--gold) 22%, transparent);
+    padding:6px 2px;
   }
   .skill-group-head{display:flex; align-items:center; gap:11px;}
   .skill-group-icon{
@@ -715,38 +707,49 @@
   .skill-tag:hover{
     color:var(--text); border-color:var(--gold);
     background:color-mix(in srgb, var(--gold) 14%, var(--panel));
+    transform:translateY(-3px);
   }
 
   /* ---------- CERTS ---------- */
-  /* Same card treatment as Skills/Info cards for visual consistency. */
-  .cert-grid{
-    display:grid; grid-template-columns:repeat(5,1fr); gap:18px;
-    align-items:stretch;
-  }
-  .cert-card{
-    display:flex; flex-direction:column; align-items:center; gap:14px; text-align:center;
+  /* Editorial credential list instead of a card grid: one shared panel,
+     each certification as a row with a badge, name, and a verified mark. */
+  .cert-list{
+    display:flex; flex-direction:column;
     background:linear-gradient(160deg,var(--panel-2),var(--panel));
     border:1px solid var(--border); border-radius:var(--radius);
-    padding:26px 16px 22px;
     box-shadow:var(--shadow);
-    transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    overflow:hidden;
   }
-  .cert-card:hover{
-    transform:translateY(-5px); border-color:var(--gold);
-    box-shadow:var(--shadow-lg), 0 0 0 1px color-mix(in srgb, var(--gold) 22%, transparent);
+  .cert-row{
+    display:flex; align-items:center; gap:18px;
+    padding:18px 26px;
+    border-bottom:1px solid var(--border);
+    position:relative;
+    transition:background .2s ease;
   }
+  .cert-row:last-child{border-bottom:none;}
+  .cert-row::before{
+    content:""; position:absolute; left:0; right:0; bottom:0; height:3px;
+    background:linear-gradient(90deg,var(--gold-soft),var(--gold));
+    transform:scaleX(0); transition:transform .25s ease;
+  }
+  .cert-row:hover{
+    background:color-mix(in srgb, var(--gold) 7%, transparent);
+  }
+  .cert-row:hover::before{transform:scaleX(1);}
   .cert-badge{
-    width:84px;height:84px;border-radius:20px; flex:none;
+    width:52px;height:52px;border-radius:14px; flex:none;
     background:linear-gradient(160deg,var(--panel-2),var(--bg-alt));
     border:1px solid var(--border);
     display:flex; align-items:center; justify-content:center;
-    font-size:28px;
+    font-size:19px;
     box-shadow:var(--shadow);
   }
-  .cert-badge .slot-fallback{font-size:28px;}
-  .cert-card p{font-size:12.5px; color:var(--text-dim); line-height:1.5;}
-  .cert-card p + p{
-    margin-top:2px; padding-top:9px;
+  .cert-badge .slot-fallback{font-size:19px;}
+  .cert-row-text{flex:1; min-width:0; display:flex; flex-direction:column;}
+  .cert-row p{font-size:13.5px; color:var(--text); line-height:1.45; font-weight:500;}
+  .cert-row p + p{
+    margin-top:6px; padding-top:6px;
     border-top:1px solid color-mix(in srgb, var(--border) 65%, transparent);
   }
 
@@ -945,7 +948,7 @@
     background:
       linear-gradient(var(--btn-fill),var(--btn-fill)) padding-box,
       linear-gradient(120deg,var(--gold-soft),var(--gold)) border-box;
-    border:2px solid transparent;
+    border:1.5px solid transparent;
     color:var(--btn-text); padding:8px 18px; border-radius:999px;
     transition:transform .2s ease, filter .2s ease, box-shadow .2s ease, background .4s ease, color .4s ease;
   }
@@ -1074,7 +1077,6 @@
     .awards-col{height:auto;}
     .award{text-align:left;}
     .skills-groups{grid-template-columns:repeat(2,1fr); gap:28px 24px;}
-    .cert-grid{grid-template-columns:repeat(2,1fr); gap:14px;}
     .card-row{grid-template-columns:1fr;}
     .project-grid{grid-template-columns:1fr;}
     .media-grid{column-count:3;}
@@ -1107,10 +1109,9 @@
     .skill-group{padding:18px 16px;}
     .skill-tag{padding:6px 11px; font-size:11.5px;}
 
-    .cert-grid{grid-template-columns:repeat(2,1fr); gap:16px;}
-    .cert-card{padding:22px 14px 18px;}
-    .cert-badge{width:72px; height:72px; font-size:22px;}
-    .cert-badge .slot-fallback{font-size:22px;}
+    .cert-row{padding:16px 20px; gap:14px;}
+    .cert-badge{width:46px; height:46px; font-size:17px;}
+    .cert-badge .slot-fallback{font-size:17px;}
 
     .card-row{gap:16px;}
     .info-card{padding:24px 16px;}
@@ -1135,9 +1136,8 @@
     .wrap{padding:0 14px;}
     .hero-copy h1{font-size:clamp(26px,11vw,36px);}
     .skills-groups{grid-template-columns:1fr; gap:14px;}
-    .cert-grid{grid-template-columns:1fr 1fr; gap:12px;}
-    .cert-card{padding:18px 10px 16px; gap:10px;}
-    .cert-card p{font-size:11.5px;}
+    .cert-row{padding:14px 16px; gap:12px;}
+    .cert-row p{font-size:12px;}
     .contact-chip{font-size:12px; padding:8px 12px;}
   }
 
@@ -1377,42 +1377,44 @@
   <!-- CERTIFICATIONS -->
   <section class="section" id="certifications">
     <div class="section-head reveal"><div class="section-pill">Professional Certifications</div></div>
-    <div class="cert-grid reveal">
-      <div class="cert-card">
+    <div class="cert-list reveal">
+      <div class="cert-row">
         <div class="cert-badge img-slot" data-placeholder="🅶" data-photo-key="cert_google">
           <img class="slot-img" src="ai.jpg" alt="Google AI Professional Certificate logo" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
           <span class="slot-fallback">🅶</span>
         </div>
-        <p>Google AI Professional Certificate</p>
+        <div class="cert-row-text"><p>Google AI Professional Certificate</p></div>
       </div>
-      <div class="cert-card">
+      <div class="cert-row">
         <div class="cert-badge img-slot" data-placeholder="IT" data-photo-key="cert_philnits">
           <img class="slot-img" src="it.jpg" alt="PhilNITS IP certification logo" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
           <span class="slot-fallback">IT</span>
         </div>
-        <p>Philippine National IT Standards (IP) Certification Exam Passer</p>
+        <div class="cert-row-text"><p>Philippine National IT Standards (IP) Certification Exam Passer</p></div>
       </div>
-      <div class="cert-card">
+      <div class="cert-row">
         <div class="cert-badge img-slot" data-placeholder="✓" data-photo-key="cert_sixsigma">
           <img class="slot-img" src="gb.jpg" alt="Lean Six Sigma Green Belt logo" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
           <span class="slot-fallback">✓</span>
         </div>
-        <p>Certified Lean Six Sigma Green Belt (CLSSGB)</p>
+        <div class="cert-row-text"><p>Certified Lean Six Sigma Green Belt (CLSSGB)</p></div>
       </div>
-      <div class="cert-card">
+      <div class="cert-row">
         <div class="cert-badge img-slot" data-placeholder="🛡" data-photo-key="cert_safety">
           <img class="slot-img" src="so.jpg" alt="Certified Safety Officer 2 logo" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
           <span class="slot-fallback">🛡</span>
         </div>
-        <p>Certified Safety Officer 2 (BOSH SO2)</p>
+        <div class="cert-row-text"><p>Certified Safety Officer 2 (BOSH SO2)</p></div>
       </div>
-      <div class="cert-card">
+      <div class="cert-row">
         <div class="cert-badge img-slot" data-placeholder="α" data-photo-key="cert_data">
           <img class="slot-img" src="cdaa.jpg" alt="Certified Data Analytics Associate logo" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
           <span class="slot-fallback">α</span>
         </div>
-        <p>Certified Data Analytics Associate (CDAA)</p>
-        <p>Project Management Fundamentals Certified (PMFC)</p>
+        <div class="cert-row-text">
+          <p>Certified Data Analytics Associate (CDAA)</p>
+          <p>Project Management Fundamentals Certified (PMFC)</p>
+        </div>
       </div>
     </div>
   </section>
