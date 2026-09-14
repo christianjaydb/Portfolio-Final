@@ -584,7 +584,7 @@
       org: 'Society of Engineering Technology Students (SETS), BatStateU – The NEU, Lipa City',
       dates: 'August 2024 – August 2025',
       bullets: [
-        'Oversaw daily business operations and effectively managed resources for organizational activities and programs.',
+        'Oversaw business operations and effectively managed resources for organizational activities and programs.',
         'Assisted in planning and successfully implementing key initiatives with fellow officers and student members.',
         'Supported efficient organizational operations and contributed to the successful execution of projects and events.'
       ]
