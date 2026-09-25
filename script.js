@@ -718,7 +718,7 @@
       bullets: [
         'Represented student concerns and feedback to faculty and administration to facilitate communication and resolution.',
         'Managed communications, updates, and announcements to ensure students received accurate and timely information.',
-        'Supported and coordinated 21+ student activities, events, and initiatives to promote collaboration and participation.'
+        'Supported and coordinated 15+ student activities, events, and initiatives to promote collaboration and participation.'
       ]
     }
   };
